@@ -27,6 +27,8 @@ process.hrtime = require('browser-process-hrtime');
 const xPins = ['A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7'];
 const classicPins = [12, 6, 9, 10, 3, 2, 0, 1];
 
+// I would move this to a "CPBTHelper" file and import both here and into VCPBT
+// More accurate would be CPBInterfaceTests.js
 export function itMakesCircuitPlaygroundComponentsAvailable(
   BoardClient,
   boardSpecificSetup = null,

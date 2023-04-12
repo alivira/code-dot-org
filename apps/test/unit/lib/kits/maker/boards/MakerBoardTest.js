@@ -1,7 +1,11 @@
+// I would probably call this file MakerBoardInterfaceTest(utils?)
+
 /** @file Exports a set of tests that verify the MakerBoard interface */
 import sinon from 'sinon';
 import {EventEmitter} from 'events'; // see node-libs-browser
 import {expect} from '../../../../../util/reconfiguredChai';
+
+// these lines shouldn't be included
 import CircuitPlaygroundBoard from '@cdo/apps/lib/kits/maker/boards/circuitPlayground/CircuitPlaygroundBoard';
 import VirtualCPBoard from '@cdo/apps/lib/kits/maker/boards/VirtualCPBoard';
 import MicroBitBoard from '@cdo/apps/lib/kits/maker/boards/microBit/MicroBitBoard';
@@ -225,7 +229,7 @@ export function itImplementsTheMakerBoardInterface(
         expect(led.on).to.be.a('function');
         expect(led.off).to.be.a('function');
         expect(led.toggle).to.be.a('function');
-
+// This section should be cut
         if (
           BoardClass === CircuitPlaygroundBoard ||
           BoardClass === VirtualCPBoard
@@ -261,6 +265,7 @@ export function itImplementsTheMakerBoardInterface(
       });
     });
 
+    // This section should also be cut (and moved to a board-specific file)
     if (BoardClass === MicroBitBoard || BoardClass === VirtualMBBoard) {
       /**
        * @function

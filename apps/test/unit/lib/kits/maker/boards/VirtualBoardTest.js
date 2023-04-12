@@ -7,6 +7,9 @@ import {itMakesMicroBitComponentsAvailable} from './microBit/MicroBitBoardTest';
 
 describe('VirtualCPBoard', () => {
   // Test coverage for Circuit Playground Maker Board Interface
+
+  // Is the MakerBoardInterface those things that are consistent between the two boards?
+  // If yes, then there shouldn't be an "if class=VirtualCPBoard" - that should instead be in CPBT
   itImplementsTheMakerBoardInterface(VirtualCPBoard);
   itMakesCircuitPlaygroundComponentsAvailable(VirtualCPBoard);
 
