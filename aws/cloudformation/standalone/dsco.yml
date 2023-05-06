@@ -2,32 +2,25 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Resources for the dsco.code.org design system
 
 Parameters:
-  BucketName:
-    Type: String
-    Default: cdo-dsco
-  Domain:
-    Type: String
-    Default: code.org
-  Subdomain:
-    Type: String
-    Default: dsco
   DomainName:
     Type: String
     Default: dsco.code.org
 
 Resources:
-
-  SubdomainNameserverRecord:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneName: code.org
-      Type: NS
-
-
   HostedZone:
     Type: AWS::Route53::HostedZone
     Properties:
       Name: !Ref DomainName
+
+  SubdomainNameServerRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName : code.org.
+      Name: !Ref DomainName
+      Comment: Records for DSCO, the code.org design system
+      ResourceRecords: !GetAtt HostedZone.NameServers
+      TTL: 3600
+      Type: NS
 
   SSLCertificate:
     Type: AWS::CertificateManager::Certificate
@@ -55,41 +48,65 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - !Sub '${Subdomain}.${Domain}'
+          - !Ref DomainName
         Enabled: true
+        # Fixme
         DefaultCacheBehavior:
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
-          TargetOriginId: !Sub 's3-${BucketName}'
+          OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
+          ResponseHeadersPolicyId: b9f2fbd8-7164-4280-a62e-b4ba93413a21
+          TargetOriginId: !Sub 's3-${Bucket}'
           ViewerProtocolPolicy: https-only
         Origins:
-          - DomainName: !Sub '${BucketName}.s3.amazonaws.com'
-            Id: !Sub 's3-${BucketName}'
+          - DomainName: !GetAtt Bucket.DomainName
+            Id: !Sub 's3-${Bucket}'
             S3OriginConfig:
               OriginAccessIdentity: ""
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLCertificate
           MinimumProtocolVersion: TLSv1
           SslSupportMethod: sni-only
-      Tags:
-        - Key: environment
-          Value: production
+
+  ResponseHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties: 
+      ResponseHeadersPolicyConfig:
+        Name: DSCO Response Headers Policy
+        CorsConfig:
+          AccessControlAllowCredentials: false
+          AccessControlAllowHeaders:
+            Items: ['*']
+          AccessControlAllowMethods:
+            Items: [ALL]
+          AccessControlAllowOrigins:
+            Items:
+            - 'https://code.org'
+            - '*.code.org'
+            - '*.hourofcode.com'
+            - '*.code.org:3000'
+            - 'http://localhost-studio.code.org:*'
+            - 'http://localhost.hourofcode.com:3000'
+            - 'https://hourofcode.com'
+          AccessControlMaxAgeSec: 600
+          OriginOverride: true
 
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: !Ref BucketName
+      BucketName: !Ref DomainName
       CorsConfiguration:
         CorsRules:
           - AllowedMethods: [GET]
             AllowedOrigins:
-              - !Sub "*.${Domain}"
+              - 'https://code.org'
+              - '*.code.org'
+              - '*.hourofcode.com'
               - '*.code.org:3000'
               - 'http://localhost-studio.code.org:*'
+              - 'http://localhost.hourofcode.com:3000'
+              - 'https://hourofcode.com'
             AllowedHeaders: ['*']
-      Tags:
-        - Key: environment
-          Value: production
 
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -99,5 +116,8 @@ Resources:
         Statement:
           - Effect: Allow
             Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Sub 'arn:aws:s3:::${Bucket}/*'
+            Action: s3:GetObject
+            Resource: !GetAtt Bucket.Arn
+
+# current error:
+# Bucket cannot have ACLs set with ObjectOwnership's BucketOwnerEnforced setting (Service: Amazon S3; Status Code: 400; Error Code: InvalidBucketAclWithObjectOwnership; Request ID: GB3ZSSDVMVATXRRR; S3 Extended Request ID: Yc9+FAjFfFoejeElcqFIribuFlmc7/VfrJ2gFaau5FbB58rzo9emrTPS1mgSY52tbE2XeL2/66Mz3k5mL9n+hAiM6sd6FUo3; Proxy: null)
