@@ -108,7 +108,7 @@ class Grade
     raise InvalidResponseError.new('incorrect column names') unless tsv_data.all? {|row| (row.keys & expected_columns) == expected_columns}
 
     # 3. The Key Concept column contains one entry for each Key Concept listed in the rubric
-    key_concepts_from_response = tsv_data.map {|row| row["Key Concept"]}.uniq
+    key_concepts_from_response = tsv_data.map {|row| row["Key Concept"]}.compact.uniq
     raise InvalidResponseError.new('invalid or missing key concept') unless rubric_key_concepts.sort == key_concepts_from_response.sort
 
     # 4. All entries in the Grade column are one of the valid values
