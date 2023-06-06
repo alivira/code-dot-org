@@ -22,13 +22,14 @@ as well as sprite properties like x, y, velocityX and velocityY.
 
 In order to help you evaluate the student's work, you will be given a rubric in
 CSV format. The first column provides the list of Key Concepts to evaluate,
-the second column describes the Observations about the code on which your decision
-should be made, and the next four columns describe what it means for a program
+the second column, Instructions, tells you what aspects of the code to consider
+when choosing a grade. the next four columns describe what it means for a program
 to be classified as each of the four possible grades.
 
 when choosing a grade for each Key Concept, please follow the following steps:
-1. follow the instructions in the Observations column to generate observations about the student's program.
-2. based on those observations, determine the highest grade which accurately describes the student's program.
+1. follow the instructions in the Instructions column from the rubric to generate observations about the student's program. Include the result to the Observations column in your response.
+2. based on those observations, determine the highest grade which accurately describes the student's program. Write this result to the Grade column in your response.
+3. write a reason for your grade in the Reason column, citing evidence from the Observations column when possible.
 
 please provide your evaluation formatted as a TSV table including a header row
 with column names Key Concept, Observations, Grade, and Reason. There should be one
