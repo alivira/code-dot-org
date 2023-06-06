@@ -96,7 +96,7 @@ class Grade
   end
 
   def validate_server_response(tsv_data, rubric)
-    expected_columns = ["Key Concept", "Grade", "Reason"]
+    expected_columns = ["Key Concept", "Observations", "Grade", "Reason"]
 
     # Get the list of key concepts from the rubric
     rubric_key_concepts = CSV.parse(rubric, headers: true).map {|row| row['Key Concept']}.uniq
@@ -138,12 +138,14 @@ class Grade
       end
     end
 
-    # for each key_concept, obtain the first reason which corresponds to the majority grade
+    # for each key_concept, obtain the first observations and reason which corresponds to the majority grade
+    key_concept_to_observations = {}
     key_concept_to_reason = {}
     choices.each do |choice|
       choice.each do |row|
         key_concept = row['Key Concept']
         if key_concept_to_majority_grade[key_concept] == row['Grade']
+          key_concept_to_observations[key_concept] ||= row['Observations']
           key_concept_to_reason[key_concept] = row['Reason']
         end
       end
@@ -156,6 +158,7 @@ class Grade
       votes_text = grades.uniq.length == 1 ? '' : "<b>Votes: [#{grades.join(', ')}]</b><br>"
       {
         'Key Concept' => key_concept,
+        'Observations' => key_concept_to_observations[key_concept],
         'Grade' => grade,
         'Reason' => "#{votes_text}#{key_concept_to_reason[key_concept]}"
       }

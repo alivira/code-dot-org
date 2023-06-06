@@ -36,14 +36,15 @@ class Report
         file.puts "  <h3>Student: #{student_id}</h3>"
         file.puts "  <a href=\"#{link_base_url}/#{student_id}.js\">#{student_id}.js</a>"
         file.puts '  <table border="1">'
-        file.puts '    <tr><th>Criteria</th><th>Expected Grade</th><th>Actual Grade</th><th>Reason</th></tr>'
+        file.puts '    <tr><th>Criteria</th><th>Observations</th><th>Expected Grade</th><th>Actual Grade</th><th>Reason</th></tr>'
         grades.each do |grade|
           criteria = grade['Key Concept']
+          observations = grade['Observations']
           expected = expected_grades[student_id][criteria]
           actual = grade['Grade']
           reason = grade['Reason']
           cell_color = compute_actual_cell_color(actual, expected, passing_grades)
-          file.puts "    <tr><td>#{criteria}</td><td>#{expected}</td><td style=\"background-color: #{cell_color};\">#{actual}</td><td>#{reason}</td></tr>"
+          file.puts "    <tr><td>#{criteria}</td><td>#{observations}</td><td>#{expected}</td><td style=\"background-color: #{cell_color};\">#{actual}</td><td>#{reason}</td></tr>"
         end
         file.puts '  </table>'
       end
