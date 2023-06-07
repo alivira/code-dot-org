@@ -48,12 +48,6 @@ def command_line_options
     end
 
     opts.on(
-      '-m', '--merge', 'Use merge map file to merge ai rubric rows into teacher rubric rows.'
-    ) do
-      options[:merge] = true
-    end
-
-    opts.on(
       '-n', '--num-responses N', Integer, 'Number of responses to generate for each student. Defaults to 1.',
       'If greater than 1, grade will be determined via majority vote.'
     ) do |num_responses|
@@ -95,13 +89,11 @@ def command_line_options
   options
 end
 
-def read_inputs(prompt_file, standard_rubric_file, split_rubric_file, merge_map_file)
+def read_inputs(prompt_file, standard_rubric_file)
   prompt = File.read(prompt_file)
   standard_rubric = File.read(standard_rubric_file)
-  split_rubric = File.read(split_rubric_file)
-  merge_map = File.exist?(merge_map_file) ? File.read(merge_map_file) : nil
 
-  [prompt, standard_rubric, split_rubric, merge_map]
+  [prompt, standard_rubric]
 end
 
 def get_student_files(max_num_students:, student_ids: nil)
@@ -131,22 +123,10 @@ def get_examples
   end
 end
 
-def validate_rubrics(expected_grades, standard_rubric, split_rubric, merge_map, options)
+def validate_rubrics(expected_grades, standard_rubric, options)
   expected_concepts = expected_grades.values.first.keys[1..].sort
-
-  if options[:merge]
-    raise "missing merge map" if options[:merge] && merge_map.nil?
-
-    split_concepts = CSV.parse(split_rubric, headers: true).map {|row| row['Key Concept']}.sort
-    merge_concepts = CSV.parse(merge_map, headers: true).map {|row| row['Split Key Concept']}.sort
-    raise "merge map split concepts do not match split concepts:\n#{merge_concepts}\n#{split_concepts}" unless merge_concepts == split_concepts
-
-    merge_concepts = CSV.parse(merge_map, headers: true).map {|row| row['Original Key Concept']}.sort.uniq
-    raise "merge map standard concepts do not match expected concepts:\n#{merge_concepts}\n#{expected_concepts}" unless merge_concepts == expected_concepts
-  else
-    standard_concepts = CSV.parse(standard_rubric, headers: true).map {|row| row['Key Concept']}.sort
-    raise "standard concepts do not match expected concepts:\n#{standard_concepts}\n#{expected_concepts}" unless standard_concepts == expected_concepts
-  end
+  standard_concepts = CSV.parse(standard_rubric, headers: true).map {|row| row['Key Concept']}.sort
+  raise "standard concepts do not match expected concepts:\n#{standard_concepts}\n#{expected_concepts}" unless standard_concepts == expected_concepts
 end
 
 def validate_students(student_files, expected_grades)
@@ -155,51 +135,6 @@ def validate_students(student_files, expected_grades)
 
   unexpected_students = actual_students - expected_students
   raise "unexpected students: #{unexpected_students}" unless unexpected_students.empty?
-end
-
-# Given an array of grade rows:
-# [
-#   {
-#     "Key Concept": "Multiple Sprites - Creation",
-#     "Grade": "Extensive Evidence",
-#     "Reason": "..."
-#   },
-#   {
-#     "Key Concept": "Multiple Sprites - Updated Properties",
-#     "Grade": "Convincing Evidence",
-#     "Reason": "..."
-#   }
-# ]
-# merge the grade rows into a single row hash with the following properties:
-#   "Key Concept" is the original concept
-#   "Grade" is the lowest grade
-#   "Reason" is the concatenation of the original rows, joined by formatting and newlines
-def merge_grade_rows(grade_rows, original_concept)
-  {
-    "Key Concept" => original_concept,
-    "Grade" => grade_rows.map {|row| row['Grade']}.max_by {|grade| VALID_GRADES.index(grade)},
-    "Reason" => grade_rows.map {|row| "#{row['Key Concept']}: <b>#{row['Grade']}</b>. #{row['Reason']}"}.join("<br>")
-  }
-end
-
-# For each original key concept, the student has been graded on a set of "split"
-# key concepts which together indicate how well they did on the original
-# concept. This method merges the split key concepts with the other split
-# concepts corresponding to the same original key concept.
-#   original_concepts: an array of the original key concepts
-#   actual_grades: a hash mapping student ids to an array of grade rows, with one row for each split key concept
-#   merge_map: a CSV string mapping split key concepts to original key concepts
-def merge_grades(original_concepts, actual_grades, merge_map)
-  merge_map = CSV.parse(merge_map, headers: true).map(&:to_h)
-
-  actual_grades.map do |student_id, grades|
-    merged_grade_rows = original_concepts.map do |original_concept|
-      split_concepts = merge_map.select {|row| row['Original Key Concept'] == original_concept}.map {|row| row['Split Key Concept']}
-      grade_rows_to_merge = grades.select {|grade_row| split_concepts.include?(grade_row['Key Concept'])}
-      merge_grade_rows(grade_rows_to_merge, original_concept)
-    end
-    [student_id, merged_grade_rows]
-  end.to_h
 end
 
 def accurate?(expected_grade, actual_grade, passing_grades)
@@ -247,23 +182,21 @@ def main
   main_start_time = Time.now
   prompt_file = 'system_prompt.txt'
   standard_rubric_file = 'standard_rubric.csv'
-  split_rubric_file = 'split_rubric.csv'
-  merge_map_file = 'merge_map.csv'
   expected_grades_file = 'expected_grades.csv'
   output_file = "output/#{options[:output_filename]}"
 
   system("mkdir -p cached_responses")
   system("rm -f cached_responses/*") unless options[:use_cached]
 
-  prompt, standard_rubric, split_rubric, merge_map = read_inputs(prompt_file, standard_rubric_file, split_rubric_file, merge_map_file)
+  prompt, standard_rubric = read_inputs(prompt_file, standard_rubric_file)
   student_files = get_student_files(max_num_students: options[:max_num_students].to_i, student_ids: options[:student_ids])
   expected_grades = get_expected_grades(expected_grades_file)
   examples = get_examples
 
-  validate_rubrics(expected_grades, standard_rubric, split_rubric, merge_map, options)
+  validate_rubrics(expected_grades, standard_rubric, options)
   validate_students(student_files, expected_grades)
 
-  rubric = options[:merge] ? split_rubric : standard_rubric
+  rubric = standard_rubric
 
   actual_grades = Parallel.map(student_files, in_threads: 7) do |student_file|
     student_id = File.basename(student_file, '.js')
@@ -285,11 +218,6 @@ def main
   # skip students with invalid api response
   errors = actual_grades.reject(&:last).map(&:first)
   actual_grades = actual_grades.select(&:last).to_h
-
-  if options[:merge]
-    original_concepts = expected_grades.values.first.keys[1..].sort
-    actual_grades = merge_grades(original_concepts, actual_grades, merge_map)
-  end
 
   accuracy_by_criteria, overall_accuracy = compute_accuracy(expected_grades, actual_grades, options[:passing_grades])
   Report.new.generate_html_output(
