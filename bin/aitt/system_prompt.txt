@@ -16,6 +16,19 @@ while (true) {
 }
 ```
 
+Please keep in mind that acceleration occurs when the velocity of a sprite is changed incrementally within the draw loop, such as in these examples:
+* `sprite.velocityX += 0.2;`
+* `sprite.velocityY -= 1;`
+* `foo.velocityX = foo.velocityX + 5;`
+* `foo.velocityY = foo.velocityY - 10;`
+
+The following examples do not count as acceleration, because they set the velocity to a specific value, rather than changing it incrementally:
+* `sprite.velocityX = 5;`
+* `sprite.velocityY = -10;`
+
+The following does not count as acceleration, because it sets the velocity to a random value, rather than changing it incrementally:
+* `foo.velocityX = randomNumber(-5, 5);`
+
 The student's code will access an API defined by Code.org's fork of the p5play
 library. This API contains methods like createSprite(), background(), and drawSprites(),
 as well as sprite properties like x, y, velocityX and velocityY.
