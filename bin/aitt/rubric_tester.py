@@ -158,9 +158,16 @@ def grade_student_work(prompt, rubric, student_file, examples, options):
     )
     return student_id, grades
 
+def get_passing_grades(num_passing_grades):
+    if num_passing_grades:
+        return VALID_GRADES[:num_passing_grades]
+    else:
+        return None
+
 def main():
     command_line = " ".join(os.sys.argv)
     options = command_line_options()
+    passing_grades = get_passing_grades(options.num_passing_grades)
 
     main_start_time = time.time()
     prompt_file = 'system_prompt.txt'
@@ -193,10 +200,10 @@ def main():
     errors = [student_id for student_id, grades in actual_grades if not grades]
     actual_grades = {student_id: grades for student_id, grades in actual_grades if grades}
 
-    accuracy_by_criteria, overall_accuracy = compute_accuracy(expected_grades, actual_grades, options.passing_grades)
+    accuracy_by_criteria, overall_accuracy = compute_accuracy(expected_grades, actual_grades, passing_grades)
     report = Report()
     report.generate_html_output(
-        output_file, prompt, rubric, overall_accuracy, actual_grades, expected_grades, options.passing_grades, accuracy_by_criteria, errors
+        output_file, prompt, rubric, overall_accuracy, actual_grades, expected_grades, passing_grades, accuracy_by_criteria, errors
     )
     print(f"main finished in {int(time.time() - main_start_time)} seconds")
 

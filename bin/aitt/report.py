@@ -114,7 +114,7 @@ class Report:
             file.write('</html>\n')
 
     # TODO: deduplicate
-    def accurate(expected_grade, actual_grade, passing_grades):
+    def accurate(self, expected_grade, actual_grade, passing_grades):
         if passing_grades:
             return passing_grades.count(expected_grade) == passing_grades.count(actual_grade)
         else:
