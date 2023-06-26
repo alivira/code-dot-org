@@ -97,7 +97,6 @@ def validate_rubrics(expected_grades, standard_rubric):
     standard_concepts = sorted([rubric_dict["Key Concept"] for rubric_dict in standard_rubric_dicts])
     if standard_concepts != expected_concepts:
         raise Exception(f"standard concepts do not match expected concepts:\n{standard_concepts}\n{expected_concepts}")
-    print("rubric validation passed")
 
 def validate_students(student_files, expected_grades):
     expected_students = sorted(expected_grades.keys())
@@ -184,8 +183,12 @@ def main():
 
     rubric = standard_rubric
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
-        actual_grades = list(executor.map(lambda student_file: grade_student_work(prompt, rubric, student_file, examples, options), student_files))
+    # TODO: fix concurrency
+    #
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
+    #     actual_grades = list(executor.map(lambda student_file: grade_student_work(prompt, rubric, student_file, examples, options), student_files))
+
+    actual_grades = list(map(lambda student_file: grade_student_work(prompt, rubric, student_file, examples, options), student_files))
 
     errors = [student_id for student_id, grades in actual_grades if not grades]
     actual_grades = {student_id: grades for student_id, grades in actual_grades if grades}
