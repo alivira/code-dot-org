@@ -1,5 +1,7 @@
 import os
 import csv
+import io
+import json
 from typing import List, Dict, Any
 
 VALID_GRADES = ["Extensive Evidence", "Convincing Evidence", "Limited Evidence", "No Evidence"]
@@ -29,8 +31,8 @@ class Report:
             return 'red'
 
     def _rubric_to_html_table(self, rubric):
-        parsed_rubric = list(csv.reader([rubric]))
-        header_row = parsed_rubric.pop(0)
+        header_row = rubric.split("\n")[0].split(',')
+        parsed_rubric = list(csv.DictReader(io.StringIO(rubric)))
 
         header_html = ''.join([f'<th>{header}</th>' for header in header_row])
         rows_html = ''.join([f'<tr>{"".join([f"<td>{cell}</td>" for cell in row])}</tr>' for row in parsed_rubric])
