@@ -31,11 +31,17 @@ class Report:
             return 'red'
 
     def _rubric_to_html_table(self, rubric):
-        header_row = rubric.split("\n")[0].split(',')
-        parsed_rubric = list(csv.DictReader(io.StringIO(rubric)))
+        parsed_rubric = list(csv.reader(io.StringIO(rubric)))
 
+        header_row = parsed_rubric.pop(0)
         header_html = ''.join([f'<th>{header}</th>' for header in header_row])
-        rows_html = ''.join([f'<tr>{"".join([f"<td>{cell}</td>" for cell in row])}</tr>' for row in parsed_rubric])
+
+        rows_html = ''
+        for row in parsed_rubric:
+            rows_html += '<tr>'
+            for cell in row:
+                rows_html += f'<td>{cell}</td>'
+            rows_html += '</tr>'
 
         return f'''
         <table border="1">
