@@ -137,6 +137,34 @@ export default class ProjectManager {
     return this.enqueueSaveOrSave(forceSave);
   }
 
+  /**
+   * Returns a share URL for the current project.
+   *
+   * Share URLs can vary by application environment and project type.  For most
+   * project types the share URL is the same as the project edit and view URLs,
+   * but has no action appended to the project's channel ID. Weblab is a special
+   * case right now, because it shares projects to codeprojects.org.
+   *
+   * This function depends on the document location to determine the current
+   * application environment.
+   *
+   * @returns {string} Fully-qualified share URL for the current project.
+   */
+  getShareUrl() {
+    if (!this.lastChannel || !this.lastChannel.projectType) {
+      return null;
+    }
+    const location = this.getLocation();
+    // This will not work for web lab, but we will likely not move web lab to use ProjectManager.
+    return (
+      location.origin +
+      '/projects/' +
+      this.lastChannel.projectType +
+      '/' +
+      this.channelId
+    );
+  }
+
   addSaveSuccessListener(listener: (channel: Channel, source: Source) => void) {
     this.saveSuccessListeners.push(listener);
   }
@@ -320,5 +348,13 @@ export default class ProjectManager {
 
   private executeSaveStartListeners() {
     this.saveStartListeners.forEach(listener => listener());
+  }
+
+  // Helpers
+  /**
+   * This method exists to be mocked for unit tests.
+   */
+  getLocation() {
+    return document.location;
   }
 }
