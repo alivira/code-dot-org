@@ -7,7 +7,7 @@ import json
 import time
 import os
 from multiprocessing import Pool
-import concurrent
+import concurrent.futures
 import io
 
 from grade import Grade
@@ -190,12 +190,8 @@ def main():
 
     rubric = standard_rubric
 
-    # TODO: fix concurrency
-    #
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
-    #     actual_grades = list(executor.map(lambda student_file: grade_student_work(prompt, rubric, student_file, examples, options), student_files))
-
-    actual_grades = list(map(lambda student_file: grade_student_work(prompt, rubric, student_file, examples, options), student_files))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
+        actual_grades = list(executor.map(lambda student_file: grade_student_work(prompt, rubric, student_file, examples, options), student_files))
 
     errors = [student_id for student_id, grades in actual_grades if not grades]
     actual_grades = {student_id: grades for student_id, grades in actual_grades if grades}
