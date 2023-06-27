@@ -70,7 +70,7 @@ class Report:
         accuracy_table += '</table>'
         return accuracy_table
 
-    def generate_html_output(self, output_file, prompt, rubric, accuracy, actual_grades, expected_grades, passing_grades, accuracy_by_criteria, errors):
+    def generate_html_output(self, output_file, prompt, rubric, accuracy, actual_grades, expected_grades, passing_grades, accuracy_by_criteria, errors, command_line):
         link_base_url = f'file://{os.getcwd()}/sample_code'
 
         with open(output_file, 'w') as file:
@@ -91,9 +91,7 @@ class Report:
                 file.write(f'  <p style="color: red">{", ".join(errors)} failed to load</p>\n')
 
             file.write('  <h2>Command Line:</h2>\n')
-            # TODO: Replace command_line with the actual command line variable or function in your Python application
-            command_line = "Your command line here"
-            file.write(f'  <p><pre>{command_line}</pre><\p>\n')
+            file.write(f'  <pre>{command_line}</pre>\n')
 
             accuracy = 'N/A' if accuracy is None else f'{int(accuracy)}%'
             file.write(f'  <h2>Overall Accuracy: {accuracy}</h2>\n')

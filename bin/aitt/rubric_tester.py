@@ -203,7 +203,7 @@ def main():
     accuracy_by_criteria, overall_accuracy = compute_accuracy(expected_grades, actual_grades, passing_grades)
     report = Report()
     report.generate_html_output(
-        output_file, prompt, rubric, overall_accuracy, actual_grades, expected_grades, passing_grades, accuracy_by_criteria, errors
+        output_file, prompt, rubric, overall_accuracy, actual_grades, expected_grades, passing_grades, accuracy_by_criteria, errors, command_line
     )
     print(f"main finished in {int(time.time() - main_start_time)} seconds")
 
