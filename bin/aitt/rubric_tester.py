@@ -113,13 +113,6 @@ def validate_students(student_files, expected_grades):
         raise Exception(f"unexpected students: {unexpected_students}")
 
 
-def accurate(expected_grade, actual_grade, passing_grades):
-    if passing_grades:
-        return passing_grades.count(expected_grade) == passing_grades.count(actual_grade)
-    else:
-        return expected_grade == actual_grade
-
-
 def compute_accuracy(expected_grades, actual_grades, passing_grades):
     overall_total = 0
     overall_matches = 0
@@ -132,7 +125,7 @@ def compute_accuracy(expected_grades, actual_grades, passing_grades):
             total_by_criteria[criteria] = total_by_criteria.get(criteria, 0) + 1
             overall_total += 1
 
-            if accurate(expected_grades[student_id][criteria], row['Grade'], passing_grades):
+            if Report.accurate(expected_grades[student_id][criteria], row['Grade'], passing_grades):
                 matches_by_criteria[criteria] = matches_by_criteria.get(criteria, 0) + 1
                 overall_matches += 1
 

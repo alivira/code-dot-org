@@ -11,7 +11,7 @@ class Report:
         pass
 
     def _compute_pass_fail_cell_color(self, expected, actual, passing_grades):
-        if self.accurate(expected, actual, passing_grades):
+        if Report.accurate(expected, actual, passing_grades):
             return 'green'
         else:
             return 'red'
@@ -117,8 +117,8 @@ class Report:
             file.write('</body>\n')
             file.write('</html>\n')
 
-    # TODO: deduplicate
-    def accurate(self, expected_grade, actual_grade, passing_grades):
+    @staticmethod
+    def accurate(expected_grade, actual_grade, passing_grades):
         if passing_grades:
             return passing_grades.count(expected_grade) == passing_grades.count(actual_grade)
         else:
