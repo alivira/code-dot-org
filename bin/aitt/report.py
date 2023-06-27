@@ -3,8 +3,7 @@ import csv
 import io
 import json
 from typing import List, Dict, Any
-
-VALID_GRADES = ["Extensive Evidence", "Convincing Evidence", "Limited Evidence", "No Evidence"]
+from config import VALID_GRADES
 
 class Report:
     def __init__(self):

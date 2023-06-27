@@ -5,9 +5,7 @@ import time
 import requests
 
 from typing import List, Dict, Any
-
-# TODO: deduplicate
-VALID_GRADES = ["Extensive Evidence", "Convincing Evidence", "Limited Evidence", "No Evidence"]
+from config import VALID_GRADES
 
 class InvalidResponseError(Exception):
     pass

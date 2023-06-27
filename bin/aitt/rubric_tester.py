@@ -10,11 +10,10 @@ from multiprocessing import Pool
 import concurrent.futures
 import io
 
+from config import SUPPORTED_MODELS, VALID_GRADES
 from grade import Grade
 from report import Report
 
-VALID_GRADES = ["Extensive Evidence", "Convincing Evidence", "Limited Evidence", "No Evidence"]
-SUPPORTED_MODELS = ['gpt-4', 'gpt-4-0314', 'gpt-4-32k', 'gpt-4-32k-0314']
 
 def command_line_options():
     parser = argparse.ArgumentParser(description='Usage')
