@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 import ProjectManagerFactory from '@cdo/apps/labs/projects/ProjectManagerFactory';
 import {ProjectManagerStorageType} from '@cdo/apps/labs/types';
 import LabRegistry from '../LabRegistry';
-import {loadProject, setUpForLevel} from '../labRedux';
+import {loadProject, setUpForLevel, LabState} from '../labRedux';
 import {useAppDispatch} from '@cdo/apps/util/reduxHooks';
 import {getLevelPropertiesPath} from '@cdo/apps/code-studio/progressReduxSelectors';
 
@@ -25,6 +25,12 @@ const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
   // TODO: Convert progress redux to typescript so this can be typed better
   const scriptId = useSelector(
     (state: {progress: {scriptId: number}}) => state.progress.scriptId
+  );
+  const isStandaloneProjectLevel = useSelector(
+    (state: {lab: LabState}) => state.lab.isStandaloneProjectLevel
+  );
+  const hideShareAndRemix = useSelector(
+    (state: {lab: LabState}) => state.lab.hideShareAndRemix
   );
 
   const levelPropertiesPath = useSelector(getLevelPropertiesPath);
@@ -76,6 +82,10 @@ const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
       }
     });
   }, []);
+
+  useEffect(() => {
+    // show different header options based on these configs
+  }, [hideShareAndRemix, isStandaloneProjectLevel]);
 
   return <>{children}</>;
 };

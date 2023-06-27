@@ -28,7 +28,7 @@ import {
 import ProjectManager from './projects/ProjectManager';
 import HttpClient from '../util/HttpClient';
 
-interface LabState {
+export interface LabState {
   // If we are currently loading a lab.
   isLoading: boolean;
   isPageError: boolean;
@@ -41,6 +41,8 @@ interface LabState {
   // Whether the lab is ready for a reload.  This is used to manage the case where multiple loads
   // happen in a row, and we only want to reload the lab when we are done.
   labReadyForReload: boolean;
+  isStandaloneProjectLevel: boolean;
+  hideShareAndRemix: boolean;
 }
 
 const initialState: LabState = {
@@ -50,6 +52,8 @@ const initialState: LabState = {
   source: undefined,
   levelData: undefined,
   labReadyForReload: false,
+  isStandaloneProjectLevel: false,
+  hideShareAndRemix: true,
 };
 
 // Thunks
@@ -98,7 +102,7 @@ export const setUpForLevel = createAsyncThunk(
     }
     const {source, channel} = await projectResponse.json();
     setProjectAndLevelData(
-      {source, channel, levelData: levelProperties.levelData},
+      {source, channel, levelProperties: levelProperties},
       thunkAPI.signal.aborted,
       thunkAPI.dispatch
     );
@@ -153,6 +157,12 @@ const labSlice = createSlice({
     },
     setLabReadyForReload(state, action: PayloadAction<boolean>) {
       state.labReadyForReload = action.payload;
+    },
+    setIsStandaloneProjectLevel(state, action: PayloadAction<boolean>) {
+      state.isStandaloneProjectLevel = action.payload;
+    },
+    setHideShareAndRemix(state, action: PayloadAction<boolean>) {
+      state.hideShareAndRemix = action.payload;
     },
   },
   extraReducers: builder => {
@@ -224,7 +234,7 @@ function setProjectAndLevelData(
   data: {
     source: Source;
     channel: Channel;
-    levelData?: LevelData;
+    levelProperties?: LevelProperties;
   },
   aborted: boolean,
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>
@@ -233,11 +243,13 @@ function setProjectAndLevelData(
   if (aborted) {
     return;
   }
-  const {channel, source, levelData} = data;
+  const {channel, source, levelProperties} = data;
   dispatch(setChannel(channel));
   dispatch(setSource(source));
-  if (levelData) {
-    dispatch(setLevelData(levelData));
+  if (levelProperties) {
+    dispatch(setLevelData(levelProperties.levelData));
+    dispatch(setIsStandaloneProjectLevel(levelProperties.isProjectLevel));
+    dispatch(setHideShareAndRemix(levelProperties.hideShareAndRemix));
   }
   dispatch(setLabReadyForReload(true));
 }
@@ -258,6 +270,8 @@ export const {
   setSource,
   setLevelData,
   setLabReadyForReload,
+  setIsStandaloneProjectLevel,
+  setHideShareAndRemix,
 } = labSlice.actions;
 
 export default labSlice.reducer;

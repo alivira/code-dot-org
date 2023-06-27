@@ -73,7 +73,7 @@ export interface Level {
 export interface LevelProperties {
   // Not a complete list; add properties as needed.
   isProjectLevel: boolean;
-  hideAndShareRemix: boolean;
+  hideShareAndRemix: boolean;
   levelData: LevelData;
 }
 
