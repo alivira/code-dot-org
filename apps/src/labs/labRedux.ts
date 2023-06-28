@@ -159,10 +159,14 @@ const labSlice = createSlice({
       state.labReadyForReload = action.payload;
     },
     setIsStandaloneProjectLevel(state, action: PayloadAction<boolean>) {
-      state.isStandaloneProjectLevel = action.payload;
+      state.isStandaloneProjectLevel = !!action.payload;
     },
     setHideShareAndRemix(state, action: PayloadAction<boolean>) {
-      state.hideShareAndRemix = action.payload;
+      if (action.payload === null || action.payload === undefined) {
+        state.hideShareAndRemix = true;
+      } else {
+        state.hideShareAndRemix = action.payload;
+      }
     },
   },
   extraReducers: builder => {
@@ -247,6 +251,7 @@ function setProjectAndLevelData(
   dispatch(setChannel(channel));
   dispatch(setSource(source));
   if (levelProperties) {
+    console.log(`got level properties`, levelProperties);
     dispatch(setLevelData(levelProperties.levelData));
     dispatch(setIsStandaloneProjectLevel(levelProperties.isProjectLevel));
     dispatch(setHideShareAndRemix(levelProperties.hideShareAndRemix));

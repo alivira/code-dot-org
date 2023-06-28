@@ -12,6 +12,12 @@ import LabRegistry from '../LabRegistry';
 import {loadProject, setUpForLevel, LabState} from '../labRedux';
 import {useAppDispatch} from '@cdo/apps/util/reduxHooks';
 import {getLevelPropertiesPath} from '@cdo/apps/code-studio/progressReduxSelectors';
+import {
+  clearHeader,
+  showMinimalProjectHeader,
+  showProjectBackedHeader,
+  showProjectHeader,
+} from '@cdo/apps/code-studio/headerRedux';
 
 const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
   children,
@@ -31,6 +37,12 @@ const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
   );
   const hideShareAndRemix = useSelector(
     (state: {lab: LabState}) => state.lab.hideShareAndRemix
+  );
+  const loadedChannelId = useSelector(
+    (state: {lab: LabState}) => state.lab.channel && state.lab.channel.id
+  );
+  const isOwnerOfChannel = useSelector(
+    (state: {lab: LabState}) => state.lab.channel && state.lab.channel.isOwner
   );
 
   const levelPropertiesPath = useSelector(getLevelPropertiesPath);
@@ -84,8 +96,37 @@ const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
   }, []);
 
   useEffect(() => {
-    // show different header options based on these configs
-  }, [hideShareAndRemix, isStandaloneProjectLevel]);
+    // We will only show project headers if we are not
+    // hiding share and remix, we have a channel id, and
+    // one of the below conditions is met.
+    console.log(
+      `[HEADER] hideShareAndRemix: ${hideShareAndRemix}, loadedChannelId: ${loadedChannelId}, isStandaloneProjectLevel: ${isStandaloneProjectLevel}, isOwnerOfChannel: ${isOwnerOfChannel}`
+    );
+    if (!hideShareAndRemix && loadedChannelId) {
+      if (!isOwnerOfChannel) {
+        // non-owners see minimal header
+        console.log('[HEADER] showing minimal project header');
+        dispatch(showMinimalProjectHeader());
+      } else if (isStandaloneProjectLevel) {
+        // standalone projects see full header (includes rename option)
+        console.log('[HEADER] showing project header');
+        dispatch(showProjectHeader());
+      } else if (!isStandaloneProjectLevel) {
+        // project backed levels see share and remix, but no rename.
+        console.log('[HEADER] showing project backed header');
+        dispatch(showProjectBackedHeader());
+      }
+    } else {
+      console.log('[HEADER] clearing header');
+      dispatch(clearHeader());
+    }
+  }, [
+    hideShareAndRemix,
+    isStandaloneProjectLevel,
+    loadedChannelId,
+    isOwnerOfChannel,
+    dispatch,
+  ]);
 
   return <>{children}</>;
 };

@@ -1,6 +1,7 @@
 const SHOW_PROJECT_HEADER = 'header/SHOW_PROJECT_HEADER';
 const SHOW_MINIMAL_PROJECT_HEADER = 'header/SHOW_MINIMAL_PROJECT_HEADER';
 const SHOW_PROJECT_BACKED_HEADER = 'header/SHOW_PROJECT_BACKED_HEADER';
+const CLEAR_HEADER = 'header/CLEAR_HEADER';
 const ENABLE_LEVEL_BUILDER_SAVE_BUTTON =
   'header/ENABLE_LEVEL_BUILDER_SAVE_BUTTON';
 
@@ -49,6 +50,11 @@ export default (state = initialState, action) => {
       updatedState.overrideOnSaveURL = action.overrideOnSaveURL;
     }
     return updatedState;
+  } else if (action.type === CLEAR_HEADER) {
+    return {
+      ...state,
+      currentHeader: undefined,
+    };
   }
   return state;
 };
@@ -74,4 +80,8 @@ export const showLevelBuilderSaveButton = (
   getChanges,
   overrideHeaderText,
   overrideOnSaveURL,
+});
+
+export const clearHeader = () => ({
+  type: CLEAR_HEADER,
 });
