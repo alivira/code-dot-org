@@ -424,19 +424,6 @@ class ProjectsController < ApplicationController
 
   def remix
     return if redirect_under_13_without_tos_teacher(@level)
-    new_channel_id = remix_helper
-    redirect_to action: 'edit', channel_id: new_channel_id
-  end
-
-  def remix_without_redirect
-    error_message = under_13_without_tos_teacher?(@level)
-    return render(status: :forbidden, json: {error: error_message}) if error_message
-
-    new_channel_id = remix_helper
-    return render(status: :ok, json: {channelId: new_channel_id, levelId: @level.id})
-  end
-
-  private def remix_helper
     src_channel_id = params[:channel_id]
     begin
       _, remix_parent_id = storage_decrypt_channel_id(src_channel_id)
@@ -452,13 +439,13 @@ class ProjectsController < ApplicationController
       src: src_channel_id,
       type: project_type,
       remix_parent_id: remix_parent_id,
-      )
+    )
     AssetBucket.new.copy_files src_channel_id, new_channel_id if uses_asset_bucket?(project_type)
     AssetBucket.new.copy_level_starter_assets src_channel_id, new_channel_id if uses_starter_assets?(project_type)
     animation_list = uses_animation_bucket?(project_type) ? AnimationBucket.new.copy_files(src_channel_id, new_channel_id) : []
     SourceBucket.new.remix_source src_channel_id, new_channel_id, animation_list
     FileBucket.new.copy_files src_channel_id, new_channel_id if uses_file_bucket?(project_type)
-    new_channel_id
+    redirect_to action: 'edit', channel_id: new_channel_id
   end
 
   private def uses_asset_bucket?(project_type)
