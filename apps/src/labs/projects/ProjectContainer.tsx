@@ -18,19 +18,17 @@ import {
   showProjectBackedHeader,
   showProjectHeader,
 } from '@cdo/apps/code-studio/headerRedux';
+import {ProgressState} from '@cdo/apps/code-studio/progressRedux';
 
 const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
   children,
   channelId,
 }) => {
   const currentLevelId = useSelector(
-    // TODO: Convert progress redux to typescript so this can be typed better
-    (state: {progress: {currentLevelId: string}}) =>
-      state.progress.currentLevelId
+    (state: {progress: ProgressState}) => state.progress.currentLevelId
   );
-  // TODO: Convert progress redux to typescript so this can be typed better
   const scriptId = useSelector(
-    (state: {progress: {scriptId: number}}) => state.progress.scriptId
+    (state: {progress: ProgressState}) => state.progress.scriptId || undefined
   );
   const isStandaloneProjectLevel = useSelector(
     (state: {lab: LabState}) => state.lab.isStandaloneProjectLevel
@@ -66,7 +64,7 @@ const ProjectContainer: React.FunctionComponent<ProjectContainerProps> = ({
         )
       );
       promise = dispatch(loadProject());
-    } else {
+    } else if (currentLevelId !== null) {
       promise = dispatch(
         setUpForLevel({
           levelId: parseInt(currentLevelId),
