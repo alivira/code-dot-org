@@ -18,7 +18,6 @@ import MusicBlocklyWorkspace from '../blockly/MusicBlocklyWorkspace';
 import AppConfig, {getBlockMode, setAppConfig} from '../appConfig';
 import SoundUploader from '../utils/SoundUploader';
 import {baseUrl, loadLibrary} from '../utils/Loader';
-import ProgressManager from '@cdo/apps/labs/progress/ProgressManager';
 import MusicValidator from '../progress/MusicValidator';
 import Video from './Video';
 import {
@@ -29,7 +28,6 @@ import {
   setShowInstructions,
   setInstructionsPosition,
   InstructionsPositions,
-  setCurrentProgressState,
   addPlaybackEvents,
   clearPlaybackEvents,
   getCurrentlyPlayingBlockIds,
@@ -47,6 +45,7 @@ import {
   currentLevelIndex,
 } from '@cdo/apps/code-studio/progressReduxSelectors';
 import {
+  isReadOnlyWorkspace,
   setIsLoading,
   setIsPageError,
   setLabReadyForReload,
@@ -62,6 +61,10 @@ import {
 } from '../../code-studio/projectRedux';
 import {logError} from '../utils/MusicMetrics';
 import musicI18n from '../locale';
+import UpdateTimer from './UpdateTimer';
+import ValidatorProvider from '@cdo/apps/labs/progress/ValidatorProvider';
+import {Key} from '../utils/Notes';
+import LabRegistry from '@cdo/apps/labs/LabRegistry';
 
 /**
  * Top-level container for Music Lab. Manages all views on the page as well as the
@@ -98,7 +101,6 @@ class UnconnectedMusicView extends React.Component {
     instructionsPosition: PropTypes.string,
     setShowInstructions: PropTypes.func,
     setInstructionsPosition: PropTypes.func,
-    setCurrentProgressState: PropTypes.func,
     navigateToLevelId: PropTypes.func,
     clearPlaybackEvents: PropTypes.func,
     addPlaybackEvents: PropTypes.func,
@@ -111,11 +113,12 @@ class UnconnectedMusicView extends React.Component {
     setProjectUpdatedError: PropTypes.func,
     setIsLoading: PropTypes.func,
     setIsPageError: PropTypes.func,
-    source: PropTypes.object,
+    sources: PropTypes.object,
     levelData: PropTypes.object,
     labReadyForReload: PropTypes.bool,
     setLabReadyForReload: PropTypes.func,
     navigateToNextLevel: PropTypes.func,
+    isReadOnlyWorkspace: PropTypes.bool,
   };
 
   constructor(props) {
@@ -128,11 +131,16 @@ class UnconnectedMusicView extends React.Component {
     const bpm = AppConfig.getValue('bpm');
     const key = AppConfig.getValue('key');
 
-    this.player = new MusicPlayer(bpm, key);
+    this.player = new MusicPlayer(bpm, key && Key[key.toUpperCase()]);
     this.analyticsReporter = new AnalyticsReporter();
     this.musicBlocklyWorkspace = new MusicBlocklyWorkspace();
     this.soundUploader = new SoundUploader(this.player);
     this.playingTriggers = [];
+    this.musicValidator = new MusicValidator(
+      this.getIsPlaying,
+      this.getPlaybackEvents,
+      this.player
+    );
 
     // Set default for instructions position.
     const defaultInstructionsPos = AppConfig.getValue(
@@ -144,6 +152,8 @@ class UnconnectedMusicView extends React.Component {
 
     this.state = {
       showingVideo: true,
+      loadedLibrary: false,
+      currentLibraryName: null,
     };
 
     // Music Lab currently does not support share and remix
@@ -164,52 +174,9 @@ class UnconnectedMusicView extends React.Component {
     window.addEventListener('beforeunload', event => {
       this.analyticsReporter.endSession();
     });
-
-    const musicValidator = new MusicValidator(
-      this.getIsPlaying,
-      this.getPlaybackEvents,
-      this.player
-    );
-
-    const promises = [];
-
-    // Load library data.
-    promises.push(loadLibrary());
-
-    if (this.hasProgression()) {
-      this.progressManager = new ProgressManager(
-        musicValidator,
-        this.onProgressChange
-      );
-    }
-
-    Promise.all(promises)
-      .then(values => {
-        this.library = values[0];
-
-        if (getBlockMode() === BlockMode.SIMPLE2) {
-          this.sequencer = new Simple2Sequencer(this.library);
-        } else {
-          this.sequencer = new MusicPlayerStubSequencer();
-        }
-
-        Globals.setLibrary(this.library);
-        Globals.setPlayer(this.player);
-
-        this.musicBlocklyWorkspace.init(
-          document.getElementById('blockly-div'),
-          this.onBlockSpaceChange,
-          this.player
-        );
-        this.player.initialize(this.library);
-        setInterval(this.updateTimer, 1000 / 30);
-      })
-      .catch(error => {
-        this.onError(error);
-      });
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     this.musicBlocklyWorkspace.resizeBlockly();
     if (
       prevProps.userId !== this.props.userId ||
@@ -245,17 +212,27 @@ class UnconnectedMusicView extends React.Component {
     // If we just finished loading the lab, then we need to update the
     // sources and level data.
     if (!prevProps.labReadyForReload && this.props.labReadyForReload) {
-      if (this.getStartSources() || this.props.source) {
+      // Load and initialize the library and player if not done already.
+      // Read the library name first from level data, or from the project
+      // sources if not present on the level. If there is no library name
+      // specified on the level or sources, we will fallback to loading the
+      // default library.
+      let libraryName = this.props.levelData?.library;
+      if (!libraryName && this.props.sources?.labConfig?.music) {
+        libraryName = this.props.sources.labConfig.music.library;
+      }
+      await this.loadAndInitializePlayer(libraryName);
+
+      if (this.getStartSources() || this.props.sources) {
         let codeToLoad = this.getStartSources();
-        if (this.props.source?.source) {
-          codeToLoad = JSON.parse(this.props.source.source);
+        if (this.props.sources?.source) {
+          codeToLoad = JSON.parse(this.props.sources.source);
         }
-        this.musicBlocklyWorkspace.loadCode(codeToLoad);
+        this.loadCode(codeToLoad);
       }
 
       // Update components with level-specific data
       if (this.props.levelData) {
-        this.progressManager.onLevelChange(this.props.levelData);
         this.musicBlocklyWorkspace.updateToolbox(this.props.levelData.toolbox);
         this.library.setAllowedSounds(this.props.levelData.sounds);
         this.props.setShowInstructions(!!this.props.levelData.text);
@@ -265,26 +242,45 @@ class UnconnectedMusicView extends React.Component {
     }
   }
 
-  updateTimer = () => {
-    if (this.props.isPlaying) {
-      this.props.setCurrentPlayheadPosition(
-        this.player.getCurrentPlayheadPosition()
-      );
-
-      this.updateHighlightedBlocks();
-
-      this.progressManager?.updateProgress();
+  // Load the library and initialize the music player, if not already loaded.
+  // Currently, we only load one library per progression.
+  loadAndInitializePlayer = async libraryName => {
+    if (this.state.loadedLibrary) {
+      return;
     }
-  };
 
-  onProgressChange = () => {
-    const currentState = this.progressManager.getCurrentState();
-    this.props.setCurrentProgressState(currentState);
+    this.props.setIsLoading(true);
 
-    // Tell the external system (if there is one) about the success.
-    if (this.isScriptLevel() && currentState.satisfied) {
-      this.props.sendSuccessReport('music');
+    try {
+      this.library = await loadLibrary(libraryName);
+    } catch (error) {
+      this.onError(error);
+      return;
     }
+
+    if (getBlockMode() === BlockMode.SIMPLE2) {
+      this.sequencer = new Simple2Sequencer(this.library);
+    } else {
+      this.sequencer = new MusicPlayerStubSequencer();
+    }
+
+    Globals.setLibrary(this.library);
+    Globals.setPlayer(this.player);
+
+    this.musicBlocklyWorkspace.init(
+      document.getElementById('blockly-div'),
+      this.onBlockSpaceChange,
+      this.player,
+      this.props.isReadOnlyWorkspace
+    );
+    this.player.initialize(this.library);
+
+    this.setState({
+      loadedLibrary: true,
+      currentLibraryName: libraryName,
+    });
+
+    this.props.setIsLoading(false);
   };
 
   onError = error => {
@@ -332,6 +328,10 @@ class UnconnectedMusicView extends React.Component {
     return this.sequencer.getPlaybackEvents();
   };
 
+  getCurrentPlayheadPosition = () => {
+    return this.player.getCurrentPlayheadPosition();
+  };
+
   // When the user initiates going to the next panel in the app.
   onNextPanel = () => {
     this.props.navigateToNextLevel();
@@ -344,7 +344,7 @@ class UnconnectedMusicView extends React.Component {
   };
 
   clearCode = () => {
-    this.musicBlocklyWorkspace.loadCode(this.getStartSources());
+    this.loadCode(this.getStartSources());
     this.setPlaying(false);
   };
 
@@ -400,7 +400,7 @@ class UnconnectedMusicView extends React.Component {
     }
 
     // This may no-op due to throttling.
-    this.musicBlocklyWorkspace.saveCode();
+    this.saveCode();
   };
 
   setPlaying = play => {
@@ -464,6 +464,31 @@ class UnconnectedMusicView extends React.Component {
     });
   };
 
+  saveCode = (forceSave = false) => {
+    const workspaceCode = this.musicBlocklyWorkspace.getCode();
+    const sourcesToSave = {
+      source: JSON.stringify(workspaceCode),
+    };
+
+    // Save the current library to sources as part of labConfig if present
+    if (this.state.currentLibraryName) {
+      sourcesToSave.labConfig = {
+        music: {
+          library: this.state.currentLibraryName,
+        },
+      };
+    }
+
+    LabRegistry.getInstance()
+      .getProjectManager()
+      ?.save(sourcesToSave, forceSave);
+  };
+
+  loadCode = code => {
+    this.musicBlocklyWorkspace.loadCode(code);
+    this.saveCode();
+  };
+
   playSong = () => {
     this.player.stopSong();
     this.playingTriggers = [];
@@ -471,7 +496,7 @@ class UnconnectedMusicView extends React.Component {
     this.compileSong();
 
     this.executeCompiledSong();
-    this.musicBlocklyWorkspace.saveCode(true);
+    this.saveCode(true);
 
     this.player.playSong(this.sequencer.getPlaybackEvents());
 
@@ -503,10 +528,6 @@ class UnconnectedMusicView extends React.Component {
   };
 
   renderInstructions(position) {
-    if (!this.progressManager) {
-      return;
-    }
-
     // For now, the instructions are intended for use with a
     // progression.  We might decide to make them agnostic at
     // some point.
@@ -560,10 +581,6 @@ class UnconnectedMusicView extends React.Component {
             <Controls
               setPlaying={this.setPlaying}
               playTrigger={this.playTrigger}
-              top={this.props.timelineAtTop}
-              instructionsAvailable={!!this.progressManager}
-              toggleInstructions={() => this.toggleInstructions(false)}
-              instructionsOnRight={false}
               hasTrigger={this.musicBlocklyWorkspace.hasTrigger.bind(
                 this.musicBlocklyWorkspace
               )}
@@ -596,6 +613,11 @@ class UnconnectedMusicView extends React.Component {
           togglePlaying={this.togglePlaying}
           playTrigger={this.playTrigger}
         />
+        <UpdateTimer
+          getCurrentPlayheadPosition={this.getCurrentPlayheadPosition}
+          updateHighlightedBlocks={this.updateHighlightedBlocks}
+        />
+        <ValidatorProvider validator={this.musicValidator} />
         <div id="music-lab" className={moduleStyles.musicLab}>
           {showInstructions &&
             instructionsPosition === InstructionsPositions.TOP &&
@@ -673,9 +695,10 @@ const MusicView = connect(
     isHeadersShowing: state.music.isHeadersShowing,
     currentScriptId: state.progress.scriptId,
     currentlyPlayingBlockIds: getCurrentlyPlayingBlockIds(state),
-    source: state.lab.source,
+    sources: state.lab.sources,
     levelData: state.lab.levelData,
     labReadyForReload: state.lab.labReadyForReload,
+    isReadOnlyWorkspace: isReadOnlyWorkspace(state),
   }),
   dispatch => ({
     setIsPlaying: isPlaying => dispatch(setIsPlaying(isPlaying)),
@@ -687,8 +710,6 @@ const MusicView = connect(
       dispatch(setShowInstructions(showInstructions)),
     setInstructionsPosition: instructionsPosition =>
       dispatch(setInstructionsPosition(instructionsPosition)),
-    setCurrentProgressState: progressState =>
-      dispatch(setCurrentProgressState(progressState)),
     navigateToLevelId: levelId => dispatch(navigateToLevelId(levelId)),
     clearPlaybackEvents: () => dispatch(clearPlaybackEvents()),
     addPlaybackEvents: playbackEvents =>

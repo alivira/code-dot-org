@@ -110,6 +110,7 @@ const CustomizableCurriculumCatalogCard = ({
   sectionsForDropdown = [],
   isTeacher,
   isSignedOut,
+  courseId,
   ...props
 }) => {
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
@@ -128,6 +129,8 @@ const CustomizableCurriculumCatalogCard = ({
           onClose={() => setIsAssignDialogOpen(false)}
           sections={sectionsForDropdown}
           participantAudience="student"
+          isAssigningCourse={!!courseId}
+          courseId={courseId}
           {...props}
         />
       );
@@ -163,14 +166,14 @@ const CustomizableCurriculumCatalogCard = ({
             <div className={style.labelsContainer}>
               <CardLabels subjectsAndTopics={subjectsAndTopics} />
             </div>
+            {!isEnglish && isTranslated && (
+              <FontAwesome
+                icon="language"
+                className="fa-solid"
+                title={translationIconTitle}
+              />
+            )}
           </div>
-          {isTranslated && (
-            <FontAwesome
-              icon="language"
-              className="fa-solid"
-              title={translationIconTitle}
-            />
-          )}
           <h4>{courseDisplayName}</h4>
           <div className={style.iconWithDescription}>
             <FontAwesome icon="user" className="fa-solid" />
