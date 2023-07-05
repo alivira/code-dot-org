@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import i18n from '@cdo/locale';
 import * as utils from '../../../utils';
 import {refreshProjectName} from '../../projectRedux';
-import {styles} from './EditableProjectName';
+import ProjectRemixButton from './ProjectRemixButton';
 
-class ProjectRemix extends React.Component {
+class LegacyProjectRemix extends React.Component {
   static propTypes = {
     isSignedIn: PropTypes.bool,
     lightStyle: PropTypes.bool,
@@ -42,28 +41,21 @@ class ProjectRemix extends React.Component {
 
   render() {
     const {lightStyle, inRestrictedShareMode} = this.props;
-    let className = 'project_remix header_button no-mc';
-    if (lightStyle) {
-      className += ' header_button_light';
-    }
-    return !inRestrictedShareMode ? (
-      <button
-        type="button"
-        className={className}
+    return (
+      <ProjectRemixButton
         onClick={this.remixProject}
-        style={styles.buttonSpacing}
-      >
-        {i18n.remix()}
-      </button>
-    ) : null;
+        lightStyle={lightStyle}
+        inRestrictedShareMode={inRestrictedShareMode}
+      />
+    );
   }
 }
 
-export const UnconnectedProjectRemix = ProjectRemix;
+export const UnconnectedLegacyProjectRemix = LegacyProjectRemix;
 export default connect(
   state => ({
     isSignedIn: state.pageConstants && state.pageConstants.isSignedIn,
     inRestrictedShareMode: state.project && state.project.inRestrictedShareMode,
   }),
   {refreshProjectName}
-)(ProjectRemix);
+)(LegacyProjectRemix);

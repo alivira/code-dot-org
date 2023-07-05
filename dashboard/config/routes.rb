@@ -261,7 +261,7 @@ Dashboard::Application.routes.draw do
           #   This makes a number of changes to how StudioApp behaves, and some changes to how P5Lab.js behaves
           get "/#{key}/:channel_id/embed_app_and_code", to: 'projects#show', key: key.to_s, as: "#{key}_project_iframe_embed_app_and_code", iframe_embed_app_and_code: true, readonly: true
           get "/#{key}/:channel_id/remix", to: 'projects#remix', key: key.to_s, as: "#{key}_project_remix"
-          get "/#{key}/:channel_id/v2/remix", to: 'projects#remix_without_redirect', key: key.to_s, as: "#{key}_project_remix_v2"
+          get "/#{key}/:channel_id/lab2/remix", to: 'projects#remix_without_redirect', key: key.to_s, as: "#{key}_project_remix_lab2"
           get "/#{key}/:channel_id/export_create_channel", to: 'projects#export_create_channel', key: key.to_s, as: "#{key}_project_export_create_channel"
           get "/#{key}/:channel_id/export_config", to: 'projects#export_config', key: key.to_s, as: "#{key}_project_export_config"
         end

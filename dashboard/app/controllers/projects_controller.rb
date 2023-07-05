@@ -428,6 +428,9 @@ class ProjectsController < ApplicationController
     redirect_to action: 'edit', channel_id: new_channel_id
   end
 
+  # Create a new remixed project, but do not redirect to the edit
+  # page for that project. Instead, return the new channel id and the
+  # standalone level id as json.
   def remix_without_redirect
     error_message = under_13_without_tos_teacher?(@level)
     return render(status: :forbidden, json: {error: error_message}) if error_message

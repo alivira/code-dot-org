@@ -171,3 +171,8 @@ export enum ProjectManagerStorageType {
   LOCAL = 'LOCAL',
   REMOTE = 'REMOTE',
 }
+
+export interface ProjectRemixResponse {
+  channelId: string;
+  levelId: number;
+}
