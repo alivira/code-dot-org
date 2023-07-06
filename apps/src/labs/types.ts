@@ -174,5 +174,5 @@ export enum ProjectManagerStorageType {
 
 export interface ProjectRemixResponse {
   channelId: string;
-  levelId: number;
+  levelId: string;
 }

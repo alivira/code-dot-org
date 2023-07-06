@@ -16,6 +16,7 @@ import {
   LevelProperties,
   ProjectManagerStorageType,
   ProjectSources,
+  ProjectType,
 } from './types';
 import LabRegistry from './LabRegistry';
 import ProjectManagerFactory from './projects/ProjectManagerFactory';
@@ -32,6 +33,8 @@ import {
   initialValidationState,
   ValidationState,
 } from './progress/ProgressManager';
+import {remix} from './projects/projectsApi';
+import {setCurrentLevelId} from '../code-studio/progressRedux';
 
 export interface LabState {
   // If we are currently loading common data for a project or level. Should only be used internally
@@ -54,6 +57,9 @@ export interface LabState {
   // Validation status for the current level. This is used by the progress system to determine
   // what instructions to display and if the user has satisfied the validation conditions, if present.
   validationState: ValidationState;
+  // A new channel id to load. This should only be set by the lab when it wants to load a new channel,
+  // and is undefined otherwise.
+  channelIdToLoad: string | undefined;
 }
 
 const initialState: LabState = {
@@ -67,6 +73,7 @@ const initialState: LabState = {
   hideShareAndRemix: true,
   isProjectLevel: false,
   validationState: {...initialValidationState},
+  channelIdToLoad: undefined,
 };
 
 // Thunks
@@ -112,14 +119,19 @@ export const setUpWithLevel = createAsyncThunk(
       return;
     }
 
-    // Create a new project manager. If we have a channel id,
-    // default to loading the project for that channel. Otherwise
+    // Check if there is a channelIdToLoad in the current state. If so, use that
+    // as our channel id, otherwise use the channelId from the payload.
+    const currentState = thunkAPI.getState() as {lab: LabState};
+    const channelId = currentState.lab.channelIdToLoad || payload.channelId;
+
+    // Create a new project manager. If we have a channel id,, default
+    // to loading the project for that channel. Otherwise,
     // create a project manager for the given level and script id.
     const projectManager =
-      payload.channelId && isProjectLevel
+      channelId && isProjectLevel
         ? ProjectManagerFactory.getProjectManager(
             ProjectManagerStorageType.REMOTE,
-            payload.channelId
+            channelId
           )
         : await ProjectManagerFactory.getProjectManagerForLevel(
             ProjectManagerStorageType.REMOTE,
@@ -176,6 +188,29 @@ export const setUpWithoutLevel = createAsyncThunk(
   }
 );
 
+export const remixProject = createAsyncThunk(
+  'lab/remixProject',
+  async (_, thunkAPI) => {
+    const currentState = thunkAPI.getState() as {lab: LabState};
+    if (!currentState.lab.channel) {
+      return thunkAPI.rejectWithValue('No channel to remix');
+    }
+    const projectType = currentState.lab.channel.projectType;
+    if (!projectType) {
+      return thunkAPI.rejectWithValue('No project type to remix');
+    }
+    const channelToRemix = currentState.lab.channel.id;
+    const {response, value} = await remix(projectType, channelToRemix);
+    if (response.ok) {
+      const {levelId, channelId} = value;
+      thunkAPI.dispatch(setChannelIdToLoad(channelId));
+      thunkAPI.dispatch(setCurrentLevelId(levelId));
+    } else {
+      return thunkAPI.rejectWithValue(response.text);
+    }
+  }
+);
+
 // Selectors
 
 // If any load is currently in progress.
@@ -217,6 +252,9 @@ const labSlice = createSlice({
     },
     setValidationState(state, action: PayloadAction<ValidationState>) {
       state.validationState = {...action.payload};
+    },
+    setChannelIdToLoad(state, action: PayloadAction<string | undefined>) {
+      state.channelIdToLoad = action.payload;
     },
   },
   extraReducers: builder => {
@@ -347,6 +385,7 @@ export const {
   setLevelData,
   setLabReadyForReload,
   setValidationState,
+  setChannelIdToLoad,
 } = labSlice.actions;
 
 // These should not be set outside of the lab slice.
