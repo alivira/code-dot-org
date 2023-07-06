@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!, except: [:load, :create_new, :show, :edit, :readonly, :redirect_legacy, :public, :index, :export_config, :weblab_footer, :get_or_create_for_level]
   before_action :redirect_admin_from_labs, only: [:load, :create_new, :show, :edit, :remix]
   before_action :authorize_load_project!, only: [:load, :create_new, :edit, :remix]
-  before_action :set_level, only: [:load, :create_new, :show, :edit, :readonly, :remix, :export_config, :export_create_channel]
+  before_action :set_level, only: [:load, :create_new, :show, :edit, :readonly, :remix, :export_config, :export_create_channel, :remix_without_redirect]
   protect_from_forgery except: :export_config
   include LevelsHelper
 

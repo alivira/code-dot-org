@@ -363,6 +363,14 @@ export const progressionsFromLevels = levels => {
   return progressions;
 };
 
+export const currentLevel = state => {
+  const levels = levelsForLessonId(
+    state.progress,
+    state.progress.currentLessonId
+  );
+  return levels.find(level => level.isCurrentLevel);
+};
+
 // Helpers
 
 /**

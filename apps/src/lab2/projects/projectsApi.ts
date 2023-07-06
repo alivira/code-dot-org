@@ -22,6 +22,6 @@ export async function remix(
   channelId: string
 ): Promise<GetResponse<ProjectRemixResponse>> {
   return HttpClient.fetchJson<ProjectRemixResponse>(
-    `${rootUrl}/${projectType}/${channelId}/lab2/remix`
+    `${rootUrl}${projectType}/${channelId}/lab2/remix`
   );
 }

@@ -1,16 +1,28 @@
 import React from 'react';
-import LabRegistry from '@cdo/apps/labs/LabRegistry';
+import Lab2Registry from '@cdo/apps/lab2/Lab2Registry';
 import LegacyProjectRemix from './LegacyProjectRemix';
 import {useAppDispatch} from '@cdo/apps/util/reduxHooks';
 import ProjectRemixButton from './ProjectRemixButton';
-import {remixProject} from '@cdo/apps/labs/labRedux';
+import {remixProject} from '@cdo/apps/lab2/lab2Redux';
+import {useSelector} from 'react-redux';
+import {ProgressState} from '../../progressRedux';
+import {currentLevel} from '../../progressReduxSelectors';
+import {Level} from '@cdo/apps/types/progressTypes';
 
 const ProjectRemix: React.FunctionComponent<ProjectRemixProps> = ({
   lightStyle,
 }) => {
-  if (LabRegistry.getInstance().getProjectManager() !== null) {
+  const level = useSelector((state: {progress: ProgressState}) =>
+    state.progress ? (currentLevel(state) as Level) : undefined
+  );
+  if (!level) {
+    console.log('no level...');
+    return null;
+  } else if (level?.usesLab2) {
+    console.log('about to call lab2projectremix');
     return <Lab2ProjectRemix lightStyle={lightStyle} />;
   } else {
+    console.log('about to call legacyprojectremix');
     return <LegacyProjectRemix lightStyle={lightStyle} />;
   }
 };
