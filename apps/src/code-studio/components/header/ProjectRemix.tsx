@@ -35,7 +35,6 @@ const Lab2ProjectRemix: React.FunctionComponent<ProjectRemixProps> = ({
   lightStyle,
 }) => {
   const dispatch = useAppDispatch();
-  console.log('in Lab2ProjectRemix');
 
   return (
     <ProjectRemixButton

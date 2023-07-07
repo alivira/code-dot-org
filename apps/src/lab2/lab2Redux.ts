@@ -34,7 +34,7 @@ import {
   ValidationState,
 } from './progress/ProgressManager';
 import {remix} from './projects/projectsApi';
-import {setCurrentLevelId} from '../code-studio/progressRedux';
+import {clearProgressAndSetCurrentLevel} from '../code-studio/progressRedux';
 import {updateBrowserForProjectNavigation} from '../code-studio/browserNavigation';
 import {currentLocation} from '../utils';
 
@@ -207,12 +207,16 @@ export const remixProject = createAsyncThunk(
     const {response, value} = await remix(projectType, channelToRemix);
     if (response.ok) {
       const {levelId, channelId} = value;
-      thunkAPI.dispatch(setChannelIdToLoad(channelId));
-      thunkAPI.dispatch(setCurrentLevelId(levelId));
       const newUrl =
         currentLocation().origin + '/projects/' + projectType + '/' + channelId;
       console.log('updating browser!');
       updateBrowserForProjectNavigation(newUrl, '', '');
+      thunkAPI.dispatch(setChannelIdToLoad(channelId));
+      thunkAPI.dispatch(setCurrentProjectType(projectType));
+      thunkAPI.dispatch(clearProgressAndSetCurrentLevel(levelId.toString()));
+      console.log('updating header?');
+      dashboard.header.buildProjectInfoOnly(levelId.toString());
+      // thunkAPI.dispatch(setCurrentLevelId(levelId));
     } else {
       return thunkAPI.rejectWithValue(response.text);
     }

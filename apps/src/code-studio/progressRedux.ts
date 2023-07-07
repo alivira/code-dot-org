@@ -250,6 +250,10 @@ const progressSlice = createSlice({
     setLessonExtrasEnabled(state, action: PayloadAction<boolean>) {
       state.lessonExtrasEnabled = action.payload;
     },
+    clearProgressAndSetCurrentLevel(state, action: PayloadAction<string>) {
+      Object.assign(state, initialState);
+      state.currentLevelId = action.payload;
+    },
   },
   extraReducers: {
     // TODO: When we convert viewAsRedux to redux-toolkit, we will need to use
@@ -495,6 +499,7 @@ export const {
   setCurrentLessonId,
   setScriptCompleted,
   setLessonExtrasEnabled,
+  clearProgressAndSetCurrentLevel,
 } = progressSlice.actions;
 
 export default progressSlice.reducer;

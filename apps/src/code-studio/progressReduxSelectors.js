@@ -368,7 +368,7 @@ export const currentLevel = state => {
     state.progress,
     state.progress.currentLessonId
   );
-  return levels.find(level => level.isCurrentLevel);
+  return levels?.find(level => level.isCurrentLevel);
 };
 
 // Helpers
