@@ -16,6 +16,7 @@ import {
   LevelProperties,
   ProjectManagerStorageType,
   ProjectSources,
+  ProjectType,
 } from './types';
 import Lab2Registry from './Lab2Registry';
 import ProjectManagerFactory from './projects/ProjectManagerFactory';
@@ -61,6 +62,7 @@ export interface LabState {
   // A new channel id to load. This should only be set by the lab when it wants to load a new channel,
   // and is undefined otherwise.
   channelIdToLoad: string | undefined;
+  currentProjectType: ProjectType | undefined;
 }
 
 const initialState: LabState = {
@@ -75,6 +77,7 @@ const initialState: LabState = {
   isProjectLevel: false,
   validationState: {...initialValidationState},
   channelIdToLoad: undefined,
+  currentProjectType: undefined,
 };
 
 // Thunks
@@ -261,6 +264,12 @@ const labSlice = createSlice({
     setChannelIdToLoad(state, action: PayloadAction<string | undefined>) {
       state.channelIdToLoad = action.payload;
     },
+    setCurrentProjectType(
+      state,
+      action: PayloadAction<ProjectType | undefined>
+    ) {
+      state.currentProjectType = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(setUpWithLevel.fulfilled, state => {
@@ -391,6 +400,7 @@ export const {
   setLabReadyForReload,
   setValidationState,
   setChannelIdToLoad,
+  setCurrentProjectType,
 } = labSlice.actions;
 
 // These should not be set outside of the lab slice.
