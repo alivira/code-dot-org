@@ -53,12 +53,23 @@ export function updateBrowserForLevelNavigation(
   levelId
 ) {
   window.history.pushState({}, '', levelUrl + window.location.search);
-  setWindowTitle(progressStoreState, levelId);
+  setLevelWindowTitle(progressStoreState, levelId);
+}
+
+// Handles a user navigation to a new project, by pushing this new project's URL
+// onto the browser session history stack, and updating the window title.
+export function updateBrowserForProjectNavigation(
+  projectUrl,
+  projectName,
+  labName
+) {
+  window.history.pushState({}, '', projectUrl + window.location.search);
+  setProjectWindowTitle(projectName, labName);
 }
 
 // If we are on a new level without doing a page reload, then we should set the title
 // to match what levels_helper.rb's level_title function would have done.
-export function setWindowTitle(progressStoreState, newLevelId) {
+export function setLevelWindowTitle(progressStoreState, newLevelId) {
   const lesson = progressStoreState.lessons.find(
     lesson => lesson.id === progressStoreState.currentLessonId
   );
@@ -72,4 +83,8 @@ export function setWindowTitle(progressStoreState, newLevelId) {
     numLessons > 1
       ? `${lessonName} #${lessonIndex} | ${scriptDisplayName} - Code.org`
       : `${lessonName} #${lessonIndex} - Code.org`;
+}
+
+function setProjectWindowTitle(projectName, labName) {
+  document.title = projectName + ' - ' + labName + ' - Code.org';
 }

@@ -34,6 +34,8 @@ import {
 } from './progress/ProgressManager';
 import {remix} from './projects/projectsApi';
 import {setCurrentLevelId} from '../code-studio/progressRedux';
+import {updateBrowserForProjectNavigation} from '../code-studio/browserNavigation';
+import {currentLocation} from '../utils';
 
 export interface LabState {
   // If we are currently loading common data for a project or level. Should only be used internally
@@ -204,6 +206,10 @@ export const remixProject = createAsyncThunk(
       const {levelId, channelId} = value;
       thunkAPI.dispatch(setChannelIdToLoad(channelId));
       thunkAPI.dispatch(setCurrentLevelId(levelId));
+      const newUrl =
+        currentLocation().origin + '/projects/' + projectType + '/' + channelId;
+      console.log('updating browser!');
+      updateBrowserForProjectNavigation(newUrl, '', '');
     } else {
       return thunkAPI.rejectWithValue(response.text);
     }
