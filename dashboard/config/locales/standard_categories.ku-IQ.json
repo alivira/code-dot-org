@@ -1,0 +1,20 @@
+{
+  "ku-IQ": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "بازنە"
+        },
+        "CT": {
+          "description": "بیرکردنەوەی ژمارەیی"
+        },
+        "F": {
+          "description": "فرمانەکان"
+        },
+        "L": {
+          "description": "زمان"
+        }
+      }
+    }
+  }
+}

@@ -9,8 +9,9 @@ he:
       age: גיל
       answer: 'תשובה
 
-'
+        '
       binary: בינארי
+      birds: ציפורים
       cats: חתולים
       color: צבע
       counter: סופר
@@ -30,6 +31,7 @@ he:
       repeat: חזור
       right: ימינה
       score: ניקוד
+      shout: צרחה
       size: גודל
       speed: מהירות
       type: סוג

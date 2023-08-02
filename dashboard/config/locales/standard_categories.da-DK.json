@@ -1,0 +1,20 @@
+{
+  "da-DK": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "Tunnel"
+        },
+        "CT": {
+          "description": "Data-Tænkning"
+        },
+        "F": {
+          "description": "Funktioner"
+        },
+        "L": {
+          "description": "Sprog"
+        }
+      }
+    }
+  }
+}

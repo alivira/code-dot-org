@@ -1,0 +1,14 @@
+{
+  "se-FI": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "Jorbbát"
+        },
+        "L": {
+          "description": "Giella"
+        }
+      }
+    }
+  }
+}

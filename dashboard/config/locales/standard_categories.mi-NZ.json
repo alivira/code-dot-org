@@ -1,0 +1,20 @@
+{
+  "mi-NZ": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "Porowhita"
+        },
+        "CT": {
+          "description": "Whakaaro ā-Rorohiko"
+        },
+        "F": {
+          "description": "Ngā Taumahi"
+        },
+        "L": {
+          "description": "Reo"
+        }
+      }
+    }
+  }
+}

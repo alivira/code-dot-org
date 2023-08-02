@@ -13,6 +13,7 @@ pt:
       Conditionals: Condições
       Dancers: Bailarinos
       Default: Padrão
+      Effects: Efeitos
       Events: Eventos
       Functions: funções
       'Functions ': 'Funções '
@@ -29,7 +30,7 @@ pt:
       Properties: Propriedades
       Sprites: Sprite
       Text: Texto
-      Variables: variáveis
+      Variables: Variáveis
       'Variables ': 'Variáveis '
       'Variables  ': 'Variáveis  '
       World: Mundo

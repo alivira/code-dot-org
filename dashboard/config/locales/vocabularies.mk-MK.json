@@ -2,53 +2,26 @@
   "mk-MK": {
     "data": {
       "vocabularies": {
-        "function/hero/unversioned": {
-          "word": "Функција"
+        "input/csd/2021": {
+          "word": "Влез"
         },
-        "code/poem-art/2021": {
-          "word": "Код"
-        },
-        "code/artist/unversioned": {
-          "word": "Код"
-        },
-        "loops/aquatic/unversioned": {
-          "word": "Лупови"
-        },
-        "code/sports/unversioned": {
-          "word": "Код"
-        },
-        "variable/coursef/2022": {
+        "variable/csd/2021": {
           "word": "Променлива"
         },
-        "define/coursef/2022": {
-          "word": "Дефинирајте"
-        },
-        "function/coursee/2022": {
+        "function/csd/2021": {
           "word": "Функција"
         },
-        "define/coursee/2022": {
-          "word": "Дефинирајте"
-        },
-        "function/express/2022": {
+        "function/coursee/2021": {
           "word": "Функција"
         },
-        "variable/express/2022": {
-          "word": "Променлива"
-        },
-        "define/express/2022": {
+        "define/coursee/2021": {
           "word": "Дефинирајте"
-        },
-        "variable/csd/2022": {
-          "word": "Променлива"
-        },
-        "function/csd/2022": {
-          "word": "Функција"
-        },
-        "code/poem-art/unversioned": {
-          "word": "Код"
         },
         "variable/coursef/2021": {
           "word": "Променлива"
+        },
+        "input/coursef/2021": {
+          "word": "Влез"
         },
         "define/coursef/2021": {
           "word": "Дефинирајте"
@@ -62,17 +35,84 @@
         "define/express/2021": {
           "word": "Дефинирајте"
         },
-        "function/coursee/2021": {
-          "word": "Функција"
+        "input/csd/2022": {
+          "word": "Влез"
         },
-        "define/coursee/2021": {
-          "word": "Дефинирајте"
-        },
-        "variable/csd/2021": {
+        "variable/csd/2022": {
           "word": "Променлива"
         },
-        "function/csd/2021": {
+        "function/csd/2022": {
           "word": "Функција"
+        },
+        "data/coursec/2022": {
+          "word": "Податоци"
+        },
+        "function/coursee/2022": {
+          "word": "Функција"
+        },
+        "define/coursee/2022": {
+          "word": "Дефинирајте"
+        },
+        "variable/coursef/2022": {
+          "word": "Променлива"
+        },
+        "input/coursef/2022": {
+          "word": "Влез"
+        },
+        "define/coursef/2022": {
+          "word": "Дефинирајте"
+        },
+        "function/express/2022": {
+          "word": "Функција"
+        },
+        "variable/express/2022": {
+          "word": "Променлива"
+        },
+        "define/express/2022": {
+          "word": "Дефинирајте"
+        },
+        "loops/aquatic/unversioned": {
+          "word": "Лупови"
+        },
+        "code/artist/unversioned": {
+          "word": "Код"
+        },
+        "function/hero/unversioned": {
+          "word": "Функција"
+        },
+        "event/outbreak/unversioned": {
+          "word": "",
+          "definition": ""
+        },
+        "models_and_simulations/outbreak/unversioned": {
+          "word": "",
+          "definition": ""
+        },
+        "code/poem-art/2021": {
+          "word": "Код"
+        },
+        "code/sports/unversioned": {
+          "word": "Код"
+        },
+        "code/poem-art/unversioned": {
+          "word": "Код",
+          "definition": ""
+        },
+        "event/poem-art/unversioned": {
+          "word": "",
+          "definition": ""
+        },
+        "program/poem-art/unversioned": {
+          "word": "",
+          "definition": ""
+        },
+        "mood/poem-art/unversioned": {
+          "word": "",
+          "definition": ""
+        },
+        "line/poem-art/unversioned": {
+          "word": "",
+          "definition": ""
         }
       }
     }

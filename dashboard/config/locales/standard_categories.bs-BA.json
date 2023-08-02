@@ -1,0 +1,20 @@
+{
+  "bs-BA": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "Krugovi"
+        },
+        "CT": {
+          "description": "Računarsko razmišljanje"
+        },
+        "F": {
+          "description": "Funkcije"
+        },
+        "L": {
+          "description": "Jezik"
+        }
+      }
+    }
+  }
+}

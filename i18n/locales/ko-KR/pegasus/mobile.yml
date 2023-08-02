@@ -341,6 +341,7 @@
   homepage_banner_40k_teachers_link: "더 알아보기"
   homepage_slot_text_title_hoc: "Hour of Code"
   homepage_slot_text_blurb_hoc: "누구든지 배울 수 있습니다. 오늘 시작하세요."
+  homepage_slot_text_blurb_hoc_2022: "탐구하고, 놀고, 창의력을 발휘하세요!"
   homepage_slot_text_link_hoc: "Hour of Code 해보기"
   homepage_slot_text_link_about_hoc: "아워오브코드 소개"
   homepage_slot_text_link_host: "Hour of Code의 주인"
@@ -386,7 +387,7 @@
   contact_form_topic_contribution: "공헌자"
   contact_form_topic_partner: "협력자"
   contact_form_topic_other: "기타"
-  contact_form_label_topic: "제목"
+  contact_form_label_topic: "주제"
   contact_form_label_email: "이메일 주소"
   contact_form_label_message: "메시지"
   contact_form_label_submit: "메시지 보내기"
@@ -588,6 +589,7 @@
   volunteer_engineer_submission_distance_16: "10 마일"
   volunteer_engineer_submission_distance_24: "15 마일"
   volunteer_engineer_submission_distance_32: "20 마일"
+  volunteer_engineer_submission_distance_80: "50 마일"
   volunteer_engineer_submission_num_volunteers_5: "자원봉사자 5명"
   volunteer_engineer_submission_num_volunteers_10: "자원봉사자 10명"
   volunteer_engineer_submission_num_volunteers_25: "자원봉사자 25명"
@@ -696,7 +698,7 @@
   dashboard_sections_jumbotron_instruction: "새로운 섹션을 만들고 학생을 추가합니다. 섹션은 학생들을 모다 작은 모둠으로 구성할 수 있게 하여 학생들의 계정에 따라 진도를 추적할 수 있습니다."
   dashboard_sections_table_section: "섹션"
   dashboard_sections_table_secret: "로그인 유형"
-  dashboard_sections_table_grade: "등급"
+  dashboard_sections_table_grade: "학년"
   dashboard_sections_table_course: "코스"
   dashboard_sections_table_pairing_allowed: "페어 프로그래밍"
   dashboard_sections_table_stage_extras: "추가 단계"
@@ -795,7 +797,7 @@
   dashboard_login_none: "이메일"
   dashboard_stage: "단계"
   dashboard_puzzle: "퍼즐"
-  dashboard_question: "질문"
+  dashboard_question: "질문 입력"
   dashboard_response: "응답"
   dashboard_correctness: "정확성"
   dashboard_correctness_free_response: "자유 응답"
@@ -889,7 +891,7 @@
   older_systems: "저사양 시스템용 파트너 튜토리얼들"
   older_systems_subheading: "구버전 웹브라우져에서도 동작해야합니다. 모든 튜토리얼들을 제대로 살펴보시려면 <a href=\"http://browsehappy.com/\" target=\"_blank\">최신버전 웹브라우저</a> 로 업그레이드하세요."
   mobile_devices: "모바일 기기를 위한 파트너 튜토리얼들"
-  frozen_name: "안나, 엘사와 함께하는 코드"
+  frozen_name: "안나와 엘사가 함께하는 코드"
   starwars_name: '스타워즈: 코드로 은하계 건설하기'
   codeorg_name: "고전 미로게임"
   codeintl_name: "고전 미로게임"
@@ -975,8 +977,12 @@
   coursef-2020_name: 과정 F (2020)
   coursea-2021_name: 과정 A (2021)
   coursed-2021_name: 과정 D (2021)
-  coursea-2022_name: 과정 A (2021)
-  coursed-2022_name: 과정 D (2021)
+  coursea-2022_name: 과정 A (2022)
+  courseb-2022_name: 과정 B (2022)
+  coursec-2022_name: 과정 C (2022)
+  coursed-2022_name: 과정 D (2022)
+  coursee-2022_name: 과정 E (2022)
+  coursef-2022_name: 과정 F (2022)
   express-2018_name: 익스프레스 과정 (2018)
   pre-express-2018_name: 프리 리더 익스프레스 과정 (2018)
   express-2019_name: 익스프레스 과정(2019)
@@ -1525,7 +1531,7 @@
   user_header_applab: '앱 랩 '
   user_header_artist: '아티스트 '
   user_header_gamelab: "게임 랩"
-  user_header_playlab: "Play Lab"
+  user_header_playlab: "플레이 랩"
   user_header_dance: "댄스 파티"
   user_header_spritelab: "스프라이트 연구소"
   user_header_minecraft: "마인크래프트"
@@ -1566,12 +1572,15 @@
   applab_tile_subtitle: "블록 기반 프로그래밍을 사용하여 자바스크립트로 앱을 만드세요. 또는 다음 레벨에서 텍스트 기반 프로그래밍 스킬을 발휘하세요 (영어 만)"
   applab_tile_start_tutorial: "시작"
   applab_tile_teacher_guide: "교사 가이드 보기"
-  aquatic_name: '마인크래프트: 보야지 아쿠아틱'
+  aquatic_name: '마인크래프트: 수중 항해'
   account_sign_up_email_opt_in: "과정  또는 지역 기회, 기타 컴퓨터 과학 뉴스 업데이트에 관한 이메일을 발송해도 되겠습니까? (대략 월 1회)"
   account_sign_up_child_accept_terms: "본인은 부모 또는 법적 보호자로부터 Code.org 서비스 사용을 허락받았음을 확인합니다."
   hoc_overview_dance_title: "댄스 파티"
   hoc_overview_dance_subtitle: "댄스 파티를 코딩해서 친구들과 공유하세요. Katy Perry, Madonna, J. Balvin, Sia, Keith Urban, Ciara 등 25팀과 함께합니다!"
   hoc_overview_dance_2019_subtitle: "댄스 파티를 코딩해서 친구들과 공유하세요. Katy Perry, Shawn Mendes, Panic! At The Disco, Lil Nas X, Jonas Brothers, Nicki Minaj 등 34팀이 함께합니다!"
+  hoc_overview_dance_2022_subtitle: "댄스 파티를 코딩해서 친구들과 공유하세요. 비욘세, 해리 스타일스, 리조, 릴 나스 엑스, 셀레나 고메즈, 디즈니의 “엔칸토” 음악 등이 등장합니다!"
+  hoc_overview_hello_world_2022_subtitle: "4개의 재미있는 주제를 골라 당신이 만든 세계에서 상호적인 캐릭터를 코딩하세요."
+  hoc_overview_hello_world_2022_alt_text: "지구의 그림 주위를 떠다니는 움직이는 우주 비행사 및 동물 캐릭터"
   hoc_overview_title: "Code.org의 아워오브코드 활동"
   hoc_overview_subtitle: "<a href=\"https://hourofcode.com\">아워오브코드</a>는 180개 이상의 국가에서 수천만 명에 이르는 학생과 함께 하는 전 세계적인 운동입니다.  누구든지 어디에서나 아워오브코드 이벤트를 개최하거나 또는 45개 이상 언어로 제공되는 한 시간 분량의 500개 이상의 튜토리얼을 사용해 볼 수 있습니다."
   hoc_overview_subtitle_markdown: "[아워오브코드](https://hourofcode.com)는 180개 이상의 국가에서 수천만 명에 이르는 학생에게 다가가는 전 세계적인 운동입니다.  누구든지 어디에서나 아워오브코드 이벤트를 개최하거나 또는 45개 이상 언어로 제공되는 한 시간 분량의 500개 이상의 튜토리얼을 사용해 볼 수 있습니다."
@@ -1609,7 +1618,7 @@
   hoc2018_mc_download_adventurer: "마인크래프트 모험가의 오프라인 버전 다운로드."
   hoc2018_mc_educators: "교육자용"
   hoc2018_mc_educators_box1_title: "마인크래프트로 코딩"
-  hoc2018_mc_educators_box1_desc: '마인크래프트: 교육용 에디션은 교과 과정에 맞춘 커리큘럼과 마인크래프트 교육 및 코딩을 제공합니다.'
+  hoc2018_mc_educators_box1_desc: "마인크래프트: 교육용 에디션은 교과 과정에 맞춘 커리큘럼과 마인크래프트 교육 및 코딩을 제공합니다."
   hoc2018_mc_educators_box1_button: "시작하기"
   hoc2018_mc_educators_box2_title: "진행자 가이드 다운로드"
   hoc2018_mc_educators_box2_desc: "이 툴킷은 여러분이 아워오브코드를 개최하여 학생들에게 컴퓨터 과학에 흥미를 갖게 하는데 도움을 줄 것입니다."
@@ -1617,9 +1626,13 @@
   hoc2018_mc_educators_box3_title: "무료 학생 워크숍에 참석"
   hoc2018_mc_educators_box3_desc: "지역 내 마이크로소프트 스토어를 방문하여 무료 아워오브코드 워크숍에 참여하세요. 모든 스킬 레벨과 6세 이상 참여 가능. "
   hoc2018_mc_educators_box3_button: "워크숍 찾기"
+  hoc2022_mc_educators_box3_desc_markdown: '온디맨드 [무료 강좌](%{free_course_link})를 활용하거나 전체 수업을 등록하여 초청 강사와 함께 하는 실시간 아워오브코드 워크숍에 참석하세요.12월 6일부터 11일까지 CSEW 기간 동안 여러 번 제공됩니다. '
+  hoc2022_mc_educators_box3_button: "지금 등록하기"
   hoc2018_mc_educators_box4_title: "더 많은 컴퓨터 과학 리소스에 액세스"
   hoc2018_mc_educators_box4_desc: "디지털 능력과 Microsoft의 컴퓨터 과학 교육 리소스로 커뮤니티에 변화를 일으키세요."
   hoc2018_mc_educators_box4_button: "리소스 탐구"
+  hoc2022_mc_educators_box4_desc: "전문성 개발을 통해 블록부터 파이썬까지 200시간의 컴퓨터 과학 커리큘럼을 통해 K-12 학습자들의 STEM 열정을 고취시키세요."
+  hoc2022_mc_educators_box4_button: "계속 학습하기"
   hoc2018_mc_watch_videos: "시작하기 전에 영감을 불러일으키는 동영상 중 한 편을 시청하세요."
   hoc2018_mc_videos_more: "롤모델과 유명인사가 나오는 더 많은 <a href='%{inspiring_videos_playlist}'> 영감을 주는 비디오 </a>"
   hoc2018_mc_careers_more: "교육 전문가가 나오는 더 많은 <a href='%{careers_url}' target='_blank'>영감을 주는 비디오</a>"
@@ -1713,7 +1726,7 @@
   hoc2018_mc_with_microsoft: "파트너십을 통해"
   hoc2018_mc_thank_microsoft: "모든 어린이들이 컴퓨터 과학을 배우고 21세기에 성공할 기술을 얻을 수 있는 기회를 갖도록 저희의 비전과 미션에 지원하고 있는 마이크로소프트에 감사드립니다."
   hoc2019_mc_mee_title: "선의를 위한 마인크래프트 AI"
-  hoc2019_mc_mee_description1: '새 마인크래프트 아워오브코드 튜토리얼은 이제 Windows, Mac, iPad용 마인크래프트: 교육용 에디션으로 제공 가능합니다. 학생들과 함께 코딩의 기초를 배우고 AI를 탐구하세요!'
+  hoc2019_mc_mee_description1: "새 마인크래프트 아워오브코드 튜토리얼은 이제 Windows, Mac, iPad용 마인크래프트: 교육용 에디션으로 제공 가능합니다. 학생들과 함께 코딩의 기초를 배우고 AI를 탐구하세요!"
   hoc2019_mc_mee_description2: "레슨 플랜과 비디오, 컴퓨터 과학 커리큘럼, 교사 트레이닝을 포함한 무료 리소스에 액세스"
   hoc2019_mc_more_coding_resources: "더 많은 코딩 리소스"
   hoc2019_dance_previous_versions: "댄스 파티의 이전 버전을 찾으시나요?  \n여기를 클릭하여 2018년 [1부](%{dance_2018_link})와 [2부](%{dance_extras_2018_link}) 를 시작하세요."
@@ -1726,15 +1739,18 @@
   page_not_available_description: "죄송합니다. 요청하신 페이지가 더 이상 이 주소에 없습니다. 여전히 그 페이지에 접속해야 하면, [support@code.org](%{support_email_link})으로 이메일하십시오."
   page_not_available_button: "홈으로 되돌아 가기"
   hoc2020_mc_available_code_org: "Code.org 상에서 사용 가능"
-  hoc2020_mc_available_mee: '마인크래프트: 교육용 에디션에서 사용 가능'
+  hoc2020_mc_available_mee: "마인크래프트: 교육용 에디션에서 사용 가능"
   hoc2020_mc_mee_title: "마인크래프트 두 마을 이야기"
-  hoc2020_mc_mee_description: '새 마인크래프트 아워오브코드 튜토리얼은 이제 Windows, Mac, iPad용 마인크래프트: 교육용 에디션으로 제공 가능합니다. 학생들과 함께 코딩의 기초를 배우고 다양성과 포용성을 탐구하세요! 레슨 플랜과 비디오, 컴퓨터 과학 커리큘럼, 공평 레슨, 교사 트레이닝을 포함한 무료 리소스에 액세스하세요.'
+  hoc2020_mc_mee_description: "새 마인크래프트 아워오브코드 튜토리얼은 이제 Windows, Mac, iPad용 마인크래프트: 교육용 에디션으로 제공 가능합니다. 학생들과 함께 코딩의 기초를 배우고 다양성과 포용성을 탐구하세요! 레슨 플랜과 비디오, 컴퓨터 과학 커리큘럼, 공평 레슨, 교사 트레이닝을 포함한 무료 리소스에 액세스하세요."
   hoc2021_mc_mee_title: "Minecraft TimeCraft"
-  hoc2021_mc_mee_description: '시간을 거슬러 올라가 코드를 배우세요! 새로운 Minecraft 아워 오브 코드 튜토리얼을 Windows, Mac, Chromebook, iPad용 Minecraft: 교육 에디션에서 이용할 수 있게 되었습니다. 무료 교육자용 자료, 교육, 비디오로 시작하세요.'
+  hoc2021_mc_mee_description: "시간을 거슬러 올라가 코드를 배우세요! 새로운 Minecraft 아워 오브 코드 튜토리얼을 Windows, Mac, Chromebook, iPad용 Minecraft: 교육 에디션에서 이용할 수 있게 되었습니다. 무료 교육자용 자료, 교육, 비디오로 시작하세요."
   hoc2021_mc_mee_villages_title: "두 마을 이야기"
-  hoc2021_mc_mee_villages_description: 'Minecraft: 교육 에디션에서 학생들과 다양성과 포용성을 알아보며 코딩의 기초를 배워보세요.'
+  hoc2021_mc_mee_villages_description: "Minecraft: 교육 에디션에서 학생들과 다양성과 포용성을 알아보며 코딩의 기초를 배워보세요."
   hoc2021_mc_mee_ai_title: "선의를 위한 AI"
-  hoc2021_mc_mee_ai_description: 'Minecraft: 교육 에디션에서 학생들과 AI를 알아보고 코드를 배우세요.'
+  hoc2021_mc_mee_ai_description: "Minecraft: 교육 에디션에서 학생들과 AI를 알아보고 코드를 배우세요."
+  hoc2022_mc_mee_title: "마인크래프트 이스케이프 에스테이트"
+  hoc2022_mc_mee_description: '새벽이 되기 전에 수수께끼의 저택에서 탈출하여 백만 개의 에메랄드를 획득하세요! 새로운 마인크래프트 아워오브코드 튜토리얼을 이제 윈도우, 맥, 크롬북, 아이패드 및 모바일용 마인크래프트: 에듀케이션 버전에서 이용할 수 있습니다.무료 교육자 리소스, 교육 및 비디오로 시작해 보세요. '
+  hoc2022_mc_mee_timecraft_description: "마인크래프트: 에듀케이션 버전의 무료 코딩 강의를 통해 시간을 거슬러 올라가 미래를 구하세요."
   footer_powered_by_aws: "Amazon Web Services 및 “Powered by AWS” 로고는 Amazon.com, Inc. 또는 미국 및/또는 다른 국가 내 그 계열회사의 상표입니다."
   footer_built_on_github: "마이크로소프트의 GitHub 위에 구축"
   codebytes_skinny_banner_title: "12월 7-11일 CodeBytes 라이브 미니 레슨을 위해 저희에게 신청하세요!"
@@ -1783,7 +1799,7 @@
   ai_zooniverse: "주니버스- 마운틴 얼룩말 스냅샷"
   ai_zooniverse_description: "이미지 속에서 다른 동물을 식별함으로써 멸종위기에 있는 케이프 마운틴 얼룩말을 보호하는 데 도움을 주세요. "
   ai_audience: "관객"
-  ai_minecraft_description: '레슨 플랜과 비디오, 컴퓨터 과학 커리큘럼, 교사 트레이닝을 포함한 무료 리소스에 액세스 (마인크래프트: 교육 에디션 필요)'
+  ai_minecraft_description: "레슨 플랜과 비디오, 컴퓨터 과학 커리큘럼, 교사 트레이닝을 포함한 무료 리소스에 액세스 (마인크래프트: 교육 에디션 필요)"
   ai_k_12_audience: "K-12 (읽기 요구됨)"
   ai_microsoft_workshop: "마이크로소프트의 무료 가상 워크숍"
   ai_microsoft_workshop_description: "무료 STEM과 코딩 워크숍으로 호기심 유발."
@@ -1792,13 +1808,31 @@
   ai_ibm_machine_learning_for_kids: 'IBM: 아동을 위한 머신러닝'
   ai_ecs: 'ECS: 인공지능 (AI)'
   ai_ecs_description: "컴퓨터 과학 탐구 (ECS) 커리큘럼을 위한 새로운 대안 커리큘럼 단원."
+  ai_aiedu_intro: 'AiEdu: 인공 지능 소개'
+  ai_aiedu_intro_description: "AI 인트로 (Intro to AI) 는 학생들이 AI가 무엇이고 실제 세계에서 어떻게 사용되는지에 대한 개념적 지식을 개발하는 혁신적이고 문화적으로 관련성이 높은 무료 커리큘럼입니다."
   ai_elements: "AI의 요소"
   ai_elements_description: "Reaktor와 헬싱키 대학이 만든 무료 온라인 과정  시리즈 ."
   ai_cognimates: "코그니메이츠"
   ai_cognimates_description: "게임을 만들고 로봇을 프로그램하고 트레이닝하기 위한 AI 교육 플랫폼."
   ai_try_activity: "활동 시도"
+  outbreak_tile_title: "아웃브레이크"
   outbreak_tile_subtitle: "몬스터 타운이 바이러스에 감염되었습니다! 아웃브레이크 시뮬레이터의 코드를 작성해 몬스터 타운 이웃들에게 어떤 일이 일어날지를 예측하세요."
   outbreak_tile_alt: "한 무리의 보라색 괴물을 통한 바이러스 확산을 보여주는 시뮬레이션"
   footer_cookie_notice: "쿠키 방침"
   top_hoc_tutorial_applab_alt_text: "파란색 배경에 별과 광선을 발산하는 터치 스크린 태블릿을 집게 손가락으로 터치하는 갈색 손"
   minecraft_tile_alt: "산호와 돌고래, 해초로 구성된 수중 마인크래프트 장면을 배경으로 둔 두 마인크래프트 캐릭터 스티브와 알렉스"
+  hoc2022_banner_title: "탐구하고, 놀고, 창의력을 발휘하세요!"
+  hoc2022_banner_description: "우주를 탐구하고, 골을 넣고, 바로 시작하세요. 컴퓨터과학을 체험해볼 수 있는 방법은 아주 많습니다!"
+  hoc2022_cta_primary: "새로운 내용 보기"
+  hoc2022_cta_secondary: "더 많은 활동 시도해보기"
+  hoc2022_landing_page_explore_title: "탐색"
+  hoc2022_landing_page_explore_description: "컴퓨터 과학의 새로운 세계로 향하는 문을 열어보세요!"
+  hoc2022_landing_page_play_title: "재생"
+  hoc2022_landing_page_play_description: "필드와 점수를 장악해 보세요!"
+  hoc2022_landing_page_create_title: "만들기"
+  hoc2022_landing_page_create_description: "이상하고도 아름다운 무언가를 만들어보세요!"
+  hoc2022_landing_page_banner_alt_left: "우주의 토성 옆에서 춤추는 외계인"
+  hoc2022_landing_page_banner_alt_right: "이륙하는 로켓 앞 우주에서 축구공을 드리블하는 로봇"
+  try_it_yourself: "혼자 힘으로 해보세요!"
+  try_an_activity: "활동 시도해보기"
+  see_more_activities: "더 많은 활동 시도해보기"

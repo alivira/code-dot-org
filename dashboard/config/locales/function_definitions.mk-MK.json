@@ -2,9 +2,137 @@
   "mk-MK": {
     "data": {
       "function_definitions": {
+        "2-3 Artist Debugging 5": {
+          "draw body and arms": {
+            "parameters": {
+              "armlength": "должина на оружје",
+              "bodylength": "должина на телото"
+            }
+          }
+        },
         "4-5 Artist 6": {
           "draw a tree": {
             "name": "Нацртај дрво"
+          }
+        },
+        "Course 4 Artist Binary 1": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary 2": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary 3": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary 4": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary 5": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary 6": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary 7": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary Free Play 2": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary Free Play 2a": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary Free Play 2b": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Artist Binary pre1": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "Course 4 Bee Params 3": {
+          "get 3 nectar": {
+            "parameters": {
+              "direction": "Насока"
+            }
+          }
+        },
+        "Course 4 Bee Params 4": {
+          "get 3 nectar": {
+            "parameters": {
+              "direction": "Насока"
+            }
+          }
+        },
+        "Course 4 Bee Params 5": {
+          "get 5 nectar": {
+            "parameters": {
+              "direction": "Насока"
+            }
+          }
+        },
+        "Course 4 Bee Params 6": {
+          "get 5 nectar": {
+            "parameters": {
+              "direction": "Насока",
+              "nectar units": "нектар единици"
+            }
+          }
+        },
+        "Course 4 Bee Params 7": {
+          "get many nectar": {
+            "parameters": {
+              "direction": "Насока"
+            }
+          }
+        },
+        "Course 4 Bee Params 8": {
+          "get nectar make honey": {
+            "parameters": {
+              "direction": "Насока"
+            }
           }
         },
         "Course 4 Play Lab Params 1": {
@@ -37,9 +165,37 @@
             "name": "постави резултат"
           }
         },
+        "Course 4 SCF 1a": {
+          "get nectar": {
+            "parameters": {
+              "dir": "реж"
+            }
+          }
+        },
+        "Course 4 SCF 2": {
+          "draw octagons": {
+            "parameters": {
+              "numOctagons": "Нумоктагони"
+            }
+          }
+        },
         "Course 4 SCF 3": {
           "do something": {
             "name": "направи нешто"
+          }
+        },
+        "Course E: Frozen Project_examples2022": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
+        "Course E: Frozen Project_examples_2021": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
           }
         },
         "Course E: Play Lab Project": {
@@ -47,9 +203,80 @@
             "name": "направи нешто"
           }
         },
+        "Course F: Artist Project_Flowers_examples_2021": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
+        "CourseD_EOC_artist": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
+        "CourseD_EOC_artist2022": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
+        "CourseD_EOC_artist_2021": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
+        "CourseD_EOC_artist_example2021": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
+        "CourseD_EOC_artist_example20212022": {
+          "draw a pinwheel": {
+            "parameters": {
+              "repeat": "повтори"
+            }
+          }
+        },
         "Find the Wizard": {
           "do something": {
             "name": "направи нешто"
+          }
+        },
+        "Geometric Sun": {
+          "diamond": {
+            "name": "дијамант"
+          },
+          "square": {
+            "name": "квадрат"
+          },
+          "sun": {
+            "name": "сонце"
+          }
+        },
+        "Geometric Sun_2018": {
+          "diamond": {
+            "name": "дијамант"
+          },
+          "square": {
+            "name": "квадрат"
+          },
+          "sun": {
+            "name": "сонце"
+          }
+        },
+        "Guess The Number": {
+          "check guess": {
+            "parameters": {
+              "theGuess": "TheGuess"
+            }
           }
         },
         "NEW Course 4 Artist Params 10": {
@@ -116,6 +343,20 @@
             "name": "направи нешто"
           }
         },
+        "course4_artist_binary_challenge1": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "course4_artist_binary_challenge2": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
         "course4_artist_functions_challenge2": {
           "do something": {
             "name": "направи нешто"
@@ -124,6 +365,11 @@
         "course4_artist_fwp_challenge1": {
           "do something": {
             "name": "направи нешто"
+          },
+          "draw background": {
+            "parameters": {
+              "color": "Боја"
+            }
           }
         },
         "courseC_data wizard": {
@@ -131,9 +377,334 @@
             "name": "направи нешто"
           }
         },
+        "courseC_data wizard2022": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseC_data wizard_2020": {
           "do something": {
             "name": "направи нешто"
+          }
+        },
+        "courseC_data wizard_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseD_artist_binary1": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary1_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary1_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary1_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary2": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary2_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary2_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary2_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary3": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary3_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary3_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary3_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary4": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary4_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary4_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary4_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary5": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary5_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary5_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary5_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary6": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary6_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary6_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary6_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary7": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary7_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary7_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary7_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_predict1": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_predict1_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_predict1_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary8_predict1_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binaryFP_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binaryFP_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binaryFP_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary_challenge1_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary_challenge1_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary_challenge1_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary_challenge2_2018": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary_challenge2_2019": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
+          }
+        },
+        "courseD_artist_binary_challenge2_2020": {
+          "draw": {
+            "parameters": {
+              "binary": "бинарни"
+            }
           }
         },
         "courseE_artist_concept1": {
@@ -156,6 +727,11 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions102022": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions10_2018": {
           "do something": {
             "name": "направи нешто"
@@ -171,7 +747,17 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions10_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions8": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions82022": {
           "do something": {
             "name": "направи нешто"
           }
@@ -191,6 +777,16 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions8_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions8a2022": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions8a_2018": {
           "do something": {
             "name": "направи нешто"
@@ -202,6 +798,16 @@
           }
         },
         "courseE_artist_functions8a_2020": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions8a_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions8b2022": {
           "do something": {
             "name": "направи нешто"
           }
@@ -221,6 +827,16 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions8b_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions8c2022": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions8c_2018": {
           "do something": {
             "name": "направи нешто"
@@ -236,7 +852,17 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions8c_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions9": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions92022": {
           "do something": {
             "name": "направи нешто"
           }
@@ -256,7 +882,17 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions9_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions_challenge1": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions_challenge12022": {
           "do something": {
             "name": "направи нешто"
           }
@@ -276,7 +912,17 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions_challenge1_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions_challenge2": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions_challenge22022": {
           "do something": {
             "name": "направи нешто"
           }
@@ -296,7 +942,17 @@
             "name": "направи нешто"
           }
         },
+        "courseE_artist_functions_challenge2_2021": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
         "courseE_artist_functions_predict2": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions_predict22022": {
           "do something": {
             "name": "направи нешто"
           }
@@ -312,6 +968,11 @@
           }
         },
         "courseE_artist_functions_predict2_2020": {
+          "do something": {
+            "name": "направи нешто"
+          }
+        },
+        "courseE_artist_functions_predict2_2021": {
           "do something": {
             "name": "направи нешто"
           }
@@ -366,14 +1027,46 @@
             "name": "направи нешто"
           }
         },
+        "courseF_apps_collector": {
+          "end game": {
+            "name": "Крај на играта"
+          }
+        },
+        "courseF_apps_collector2022": {
+          "end game": {
+            "name": "Крај на играта"
+          }
+        },
+        "courseF_apps_collector_-2022-2": {
+          "end game": {
+            "name": "Крај на играта"
+          }
+        },
         "courseF_artist_fwp1": {
+          "checker": {
+            "parameters": {
+              "color": "Боја"
+            }
+          },
           "do something": {
             "name": "направи нешто"
           }
         },
         "courseF_artist_fwp2": {
+          "checker": {
+            "parameters": {
+              "color": "Боја"
+            }
+          },
           "do something": {
             "name": "направи нешто"
+          }
+        },
+        "courseF_artist_fwp3": {
+          "filled square": {
+            "parameters": {
+              "color": "Боја"
+            }
           }
         },
         "courseF_artist_fwp7": {
@@ -405,6 +1098,11 @@
         "courseF_artist_fwp_challenge1": {
           "do something": {
             "name": "направи нешто"
+          },
+          "draw background": {
+            "parameters": {
+              "color": "Боја"
+            }
           }
         },
         "courseF_artist_fwp_challenge2": {
@@ -415,193 +1113,6 @@
         "courseF_bee_functions8a": {
           "do something": {
             "name": "направи нешто"
-          }
-        },
-        "CourseD_EOC_artist": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "Course E: Frozen Project_examples_2021": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "Course F: Artist Project_Flowers_examples_2021": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "CourseD_EOC_artist_2021": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "CourseD_EOC_artist_example2021": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "courseC_data wizard_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions10_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8a_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8b_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8c_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions9_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions_challenge1_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions_challenge2_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions_predict2_2021": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseF_apps_collector": {
-          "end game": {
-            "name": "Крај на играта"
-          }
-        },
-        "Course E: Frozen Project_examples2022": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "CourseD_EOC_artist2022": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "CourseD_EOC_artist_example20212022": {
-          "draw a pinwheel": {
-            "parameters": {
-              "repeat": "повтори"
-            }
-          }
-        },
-        "courseC_data wizard2022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions102022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions82022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8a2022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8b2022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions8c2022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions92022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions_challenge12022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions_challenge22022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseE_artist_functions_predict22022": {
-          "do something": {
-            "name": "направи нешто"
-          }
-        },
-        "courseF_apps_collector2022": {
-          "end game": {
-            "name": "Крај на играта"
-          }
-        },
-        "courseF_apps_collector_-2022-2": {
-          "end game": {
-            "name": "Крај на играта"
-          }
-        },
-        "Geometric Sun": {
-          "sun": {
-            "name": "сонце"
-          },
-          "square": {
-            "name": "квадрат"
-          }
-        },
-        "Geometric Sun_2018": {
-          "sun": {
-            "name": "сонце"
-          },
-          "square": {
-            "name": "квадрат"
           }
         }
       }

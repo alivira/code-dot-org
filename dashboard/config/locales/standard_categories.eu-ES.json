@@ -1,0 +1,17 @@
+{
+  "eu-ES": {
+    "data": {
+      "standard_categories": {
+        "CT": {
+          "description": "Pentsamendu konputazionala"
+        },
+        "F": {
+          "description": "Funtzioak"
+        },
+        "L": {
+          "description": "Hizkuntza"
+        }
+      }
+    }
+  }
+}

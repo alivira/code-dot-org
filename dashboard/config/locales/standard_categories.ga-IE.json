@@ -1,0 +1,20 @@
+{
+  "ga-IE": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "Ciorcail"
+        },
+        "CT": {
+          "description": "Smaointeoireacht Ríomhaireachtúil"
+        },
+        "F": {
+          "description": "Feidhmeanna"
+        },
+        "L": {
+          "description": "Teanga"
+        }
+      }
+    }
+  }
+}

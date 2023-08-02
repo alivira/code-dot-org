@@ -1,0 +1,23 @@
+{
+  "fil-PH": {
+    "data": {
+      "standard_categories": {
+        "C": {
+          "description": "Mga bilog"
+        },
+        "CT": {
+          "description": "Computational Thinking"
+        },
+        "F": {
+          "description": "Mga function"
+        },
+        "IC": {
+          "description": "Epekto ng Pag-Compute"
+        },
+        "L": {
+          "description": "Lengwahe"
+        }
+      }
+    }
+  }
+}

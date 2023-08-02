@@ -1,0 +1,38 @@
+{
+  "uz-UZ": {
+    "data": {
+      "frameworks": {
+        "ai4k12-2021": {
+          "name": "AI4K12 milliy ko'rsatmalari 2021"
+        },
+        "c3ss": {
+          "name": "C3 Ijtimoiy tadqiqotlar standartlari"
+        },
+        "ccela": {
+          "name": "Ingliz tili fani standartlari"
+        },
+        "ccmath": {
+          "name": "Umumiy Matematika bo‘yicha standartlar"
+        },
+        "csa": {
+          "name": "CSA kontseptual doirasi"
+        },
+        "csp2021": {
+          "name": "CSP kontseptual doirasi"
+        },
+        "csta": {
+          "name": "CSTA K-12 kompyuter fanlari standartlari (2017)"
+        },
+        "csta2011": {
+          "name": "CSTA K-12 Kompyuter fanlari Standartlari (2011)"
+        },
+        "iste": {
+          "name": "Talabalar uchun ISTE Standartlari"
+        },
+        "ngss": {
+          "name": "Keyingi avlod fan standartlari"
+        }
+      }
+    }
+  }
+}
