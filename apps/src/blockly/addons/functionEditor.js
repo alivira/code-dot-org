@@ -42,6 +42,7 @@ export default class FunctionEditor {
     // Customize auto-populated Functions toolbox category.
     this.editorWorkspace = Blockly.blockly_.inject(modalEditor, {
       toolbox: options.toolbox,
+      move: {drag: false},
       theme: Blockly.cdoUtils.getUserTheme(options.theme),
     });
 
@@ -299,6 +300,18 @@ export default class FunctionEditor {
       );
       secondaryEvent.run(true);
     });
+
+    // Bump blocks out of the area of the workspace that are used by the name and
+    // description inputs
+    this.editorWorkspace.addChangeListener(this.handleBlockDrag.bind(this));
+  }
+
+  handleBlockDrag(event) {
+    console.log({event});
+    if (event.type === Blockly.Events.BLOCK_DRAG && !event.isStart) {
+      const draggedBlock = this.editorWorkspace.getBlockById(event.blockId);
+      console.log({draggedBlock});
+    }
   }
 
   /**
