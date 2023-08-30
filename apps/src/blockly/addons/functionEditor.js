@@ -307,10 +307,17 @@ export default class FunctionEditor {
   }
 
   handleBlockDrag(event) {
+    const minX = 50;
+    const minY = 210;
     console.log({event});
     if (event.type === Blockly.Events.BLOCK_DRAG && !event.isStart) {
       const draggedBlock = this.editorWorkspace.getBlockById(event.blockId);
       console.log({draggedBlock});
+    } else if (event.type === Blockly.Events.VIEWPORT_CHANGE) {
+      const topBlocks = this.editorWorkspace.getTopBlocks();
+      topBlocks.forEach(block => {
+        console.log({relativeXY: block.getRelativeToSurfaceXY()});
+      });
     }
   }
 
