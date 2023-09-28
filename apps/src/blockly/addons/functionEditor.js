@@ -10,6 +10,7 @@ import {
   MODAL_EDITOR_DELETE_ID,
   MODAL_EDITOR_NAME_INPUT_ID,
   MODAL_EDITOR_DESCRIPTION_INPUT_ID,
+  MODAL_EDITOR_TOOLBOX_ID,
 } from './functionEditorConstants';
 
 // This class is a work in progress. It is used for the modal function editor,
@@ -103,6 +104,7 @@ export default class FunctionEditor {
     );
 
     this.setUpEditorWorkspaceChangeListeners();
+    this.setUpParameterToolbox();
   }
 
   hide() {
@@ -313,6 +315,24 @@ export default class FunctionEditor {
       );
       secondaryEvent.run(true);
     });
+  }
+
+  setUpParameterToolbox() {
+    console.log({
+      editorWorkspace: this.editorWorkspace,
+      editorParent: this.editorWorkspace.getParentSvg(),
+    });
+    this.parameterToolbox = new Blockly.HorizontalFlyout({
+      ...this.editorWorkspace.options,
+      parentWorkspace: this.editorWorkspace,
+      hasScrollbars: false,
+      horizontalLayout: true,
+    });
+    const toolboxDom = this.parameterToolbox.createDom();
+    //console.log({toolboxDom});
+    const toolboxContainer = document.getElementById(MODAL_EDITOR_TOOLBOX_ID);
+    toolboxContainer.appendChild(toolboxDom);
+    this.parameterToolbox.init(this.editorWorkspace);
   }
 
   /**

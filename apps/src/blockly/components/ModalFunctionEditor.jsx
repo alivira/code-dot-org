@@ -5,6 +5,7 @@ import {
   MODAL_EDITOR_DELETE_ID,
   MODAL_EDITOR_CLOSE_ID,
   MODAL_EDITOR_DESCRIPTION_INPUT_ID,
+  MODAL_EDITOR_TOOLBOX_ID,
 } from '@cdo/apps/blockly/addons/functionEditorConstants';
 import moduleStyles from './modal-function-editor.module.scss';
 import classNames from 'classnames';
@@ -53,6 +54,7 @@ export default function ModalFunctionEditor() {
               />
             </div>
           </div>
+          <div id={MODAL_EDITOR_TOOLBOX_ID} />
         </div>
       </div>
     </div>

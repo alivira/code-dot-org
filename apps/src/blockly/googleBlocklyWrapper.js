@@ -213,6 +213,7 @@ function initializeBlocklyWrapper(blocklyInstance) {
   blocklyWrapper.wrapReadOnlyProperty('getRelativeXY');
   blocklyWrapper.wrapReadOnlyProperty('googlecode');
   blocklyWrapper.wrapReadOnlyProperty('hasCategories');
+  blocklyWrapper.wrapReadOnlyProperty('HorizontalFlyout');
   blocklyWrapper.wrapReadOnlyProperty('html');
   blocklyWrapper.wrapReadOnlyProperty('Input');
   blocklyWrapper.wrapReadOnlyProperty('inputTypes');

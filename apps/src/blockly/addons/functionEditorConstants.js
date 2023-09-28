@@ -7,3 +7,4 @@ export const MODAL_EDITOR_PARAM_EDITOR_INPUT_ID =
   'modalFunctionEditorParamEditor';
 export const MODAL_EDITOR_DESCRIPTION_INPUT_ID =
   'modalFunctionEditorDescription';
+export const MODAL_EDITOR_TOOLBOX_ID = 'modalFunctionEditorToolbox';
