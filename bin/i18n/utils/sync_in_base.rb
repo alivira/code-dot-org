@@ -5,36 +5,19 @@ module I18n
     class SyncInBase
       class << self
         def perform
-          new.send(:execute)
-        end
-
-        protected
-
-        def process(&block)
-          @process_block = block
-        end
-
-        private
-
-        def process_block
-          @process_block ||= proc {raise NotImplementedError}
+          new.send(:perform)
         end
       end
 
-      protected
-
-      def progress_bar
-        @progress_bar ||= I18nScriptUtils.create_progress_bar(title: self.class.name)
-      end
-
-      private
-
-      def execute
+      def perform
+        progress_bar = I18nScriptUtils.create_progress_bar(title: self.class.name)
         progress_bar.start
-
-        instance_exec(&self.class.send(:process_block))
-
+        process
         progress_bar.finish
+      end
+
+      def process
+        proc {raise NotImplementedError}
       end
     end
   end
