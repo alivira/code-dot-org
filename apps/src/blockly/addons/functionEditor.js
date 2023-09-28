@@ -318,18 +318,11 @@ export default class FunctionEditor {
   }
 
   setUpParameterToolbox() {
-    console.log({
-      editorWorkspace: this.editorWorkspace,
-      editorParent: this.editorWorkspace.getParentSvg(),
-    });
     this.parameterToolbox = new Blockly.HorizontalFlyout({
       ...this.editorWorkspace.options,
       parentWorkspace: this.editorWorkspace,
-      hasScrollbars: false,
-      horizontalLayout: true,
     });
-    const toolboxDom = this.parameterToolbox.createDom();
-    //console.log({toolboxDom});
+    const toolboxDom = this.parameterToolbox.createDom('svg');
     const toolboxContainer = document.getElementById(MODAL_EDITOR_TOOLBOX_ID);
     toolboxContainer.appendChild(toolboxDom);
     this.parameterToolbox.init(this.editorWorkspace);
