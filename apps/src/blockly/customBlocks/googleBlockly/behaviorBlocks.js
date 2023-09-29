@@ -25,7 +25,7 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
     // Block for defining a behavior (a type of procedure) with no return value.
     // When using the modal function editor, the name field is an uneditable label.
     type: 'behavior_definition',
-    message0: '%1 %2 %3 %4 %5',
+    message0: '%1 %2 %3 %4',
     message1: '%1',
     args0: [
       {
@@ -40,11 +40,6 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
         name: 'NAME',
         text: '',
         spellcheck: false,
-      },
-      {
-        type: 'field_label',
-        name: 'THIS_SPRITE',
-        text: `with: ${msg.thisSprite()}`,
       },
       {
         type: 'field_label',
@@ -245,21 +240,32 @@ export function flyoutCategory(workspace, functionEditorOpen = false) {
     const behaviorBlocks = workspace
       .getTopBlocks()
       .filter(topBlock => topBlock.type === 'behavior_definition');
-    behaviorBlocks.forEach(block =>
+    behaviorBlocks.forEach(block => {
+      let params = [];
+      if (block.getProcedureModel().getParameters().length) {
+        params = block
+          .getProcedureModel()
+          .getParameters()
+          .map(p => p.getName());
+      }
+      console.log({params});
       allBehaviors.push({
         name: block.getFieldValue('NAME'),
         id: block.id,
-      })
-    );
+        params,
+      });
+    });
   });
+  console.log({allBehaviors});
 
-  allBehaviors.sort(nameComparator).forEach(({name, id}) => {
+  allBehaviors.sort(nameComparator).forEach(({name, id, params}) => {
     blockList.push({
       kind: 'block',
       type: 'gamelab_behavior_get',
       extraState: {
         name,
         id,
+        params,
       },
       fields: {
         NAME: name,

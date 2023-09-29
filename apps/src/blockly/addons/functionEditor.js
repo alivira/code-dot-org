@@ -31,6 +31,9 @@ export default class FunctionEditor {
     this.parameterBlockTypes = opt_parameterBlockTypes || {};
     this.disableParamEditing = opt_disableParamEditing || false;
     this.paramTypes = opt_paramTypes || [];
+
+    // Current blocks in the editor's parameter toolbox.
+    this.toolboxParameters = [];
   }
 
   init(options) {
@@ -181,6 +184,11 @@ export default class FunctionEditor {
         this.editorWorkspace
       );
     }
+    this.addParamsFromProcedure();
+    console.log('about to show toolbox?');
+    console.log({toolboxParameters: this.toolboxParameters});
+    this.parameterToolbox.show(this.toolboxParameters);
+    this.parameterToolbox.position();
     this.functionDescriptionInput.value = this.block.description || '';
   }
 
@@ -386,5 +394,26 @@ export default class FunctionEditor {
     if (blockToUpdate) {
       blockToUpdate.description = this.block.description;
     }
+  }
+
+  addParamsFromProcedure() {
+    this.toolboxParameters = [];
+    let procedureInfo = this.block.getProcedureModel();
+    const parameters = procedureInfo.getParameters();
+    console.log({parameters});
+    for (var i = 0; i < procedureInfo.parameters.length; i++) {
+      this.addParameter(parameters[i].getName());
+    }
+  }
+
+  addParameter(newParameterName) {
+    this.toolboxParameters.push(this.newParameterBlock(newParameterName));
+  }
+
+  newParameterBlock(parameterName) {
+    return {
+      kind: 'block',
+      type: 'sprite_parameter_get',
+    };
   }
 }

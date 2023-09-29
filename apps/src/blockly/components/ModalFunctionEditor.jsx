@@ -54,7 +54,10 @@ export default function ModalFunctionEditor() {
               />
             </div>
           </div>
-          <div id={MODAL_EDITOR_TOOLBOX_ID} />
+          <div
+            id={MODAL_EDITOR_TOOLBOX_ID}
+            className={moduleStyles.modalToolbox}
+          />
         </div>
       </div>
     </div>

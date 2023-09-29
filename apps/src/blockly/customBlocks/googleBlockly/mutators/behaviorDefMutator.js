@@ -57,6 +57,25 @@ export const behaviorDefMutator = {
    * @this {Blockly.Block}
    */
   domToMutation: function (xmlElement) {
+    for (let i = 0; i < xmlElement.childNodes.length; i++) {
+      const node = xmlElement.childNodes[i];
+      const nodeName = node.nodeName.toLowerCase();
+      if (nodeName === 'arg') {
+        const varId = node.getAttribute('varid');
+        this.getProcedureModel().insertParameter(
+          new ObservableParameterModel(
+            this.workspace,
+            node.getAttribute('name'),
+            undefined,
+            varId
+          ),
+          i
+        );
+      } else if (nodeName === 'description') {
+        this.description = node.textContent;
+      }
+    }
+    this.setStatements_(xmlElement.getAttribute('statements') !== 'false');
     this.behaviorId = xmlElement.nextElementSibling.getAttribute('id');
   },
 
@@ -68,6 +87,9 @@ export const behaviorDefMutator = {
     const state = Object.create(null);
     state['procedureId'] = this.getProcedureModel().getId();
     state['behaviorId'] = this.behaviorId;
+    if (this.description) {
+      state['description'] = this.description;
+    }
 
     const params = this.getProcedureModel().getParameters();
     if (!params.length && this.hasStatements_) return state;
@@ -120,6 +142,9 @@ export const behaviorDefMutator = {
       }
     }
 
+    if (state['description']) {
+      this.description = state['description'];
+    }
     this.doProcedureUpdate();
     this.setStatements_(state['hasStatements'] === false ? false : true);
   },
