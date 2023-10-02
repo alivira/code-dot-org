@@ -25,7 +25,7 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
     // Block for defining a behavior (a type of procedure) with no return value.
     // When using the modal function editor, the name field is an uneditable label.
     type: 'behavior_definition',
-    message0: '%1 %2 %3 %4',
+    message0: '%1 %2 %3 %4 %5',
     message1: '%1',
     args0: [
       {
@@ -40,6 +40,11 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
         name: 'NAME',
         text: '',
         spellcheck: false,
+      },
+      {
+        type: 'field_label',
+        name: 'THIS_SPRITE',
+        text: `with: ${msg.thisSprite()}`,
       },
       {
         type: 'field_label',
@@ -87,7 +92,7 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
     style: 'behavior_blocks',
     helpUrl: '%{BKY_PROCEDURES_CALLNORETURN_HELPURL}',
     extensions: [
-      'behaviors_edit_button',
+      'procedures_edit_button',
       'procedure_caller_get_def_mixin',
       'procedure_caller_var_mixin',
       'procedure_caller_update_shape_mixin',
@@ -240,32 +245,21 @@ export function flyoutCategory(workspace, functionEditorOpen = false) {
     const behaviorBlocks = workspace
       .getTopBlocks()
       .filter(topBlock => topBlock.type === 'behavior_definition');
-    behaviorBlocks.forEach(block => {
-      let params = [];
-      if (block.getProcedureModel().getParameters().length) {
-        params = block
-          .getProcedureModel()
-          .getParameters()
-          .map(p => p.getName());
-      }
-      console.log({params});
+    behaviorBlocks.forEach(block =>
       allBehaviors.push({
         name: block.getFieldValue('NAME'),
         id: block.id,
-        params,
-      });
-    });
+      })
+    );
   });
-  console.log({allBehaviors});
 
-  allBehaviors.sort(nameComparator).forEach(({name, id, params}) => {
+  allBehaviors.sort(nameComparator).forEach(({name, id}) => {
     blockList.push({
       kind: 'block',
       type: 'gamelab_behavior_get',
       extraState: {
         name,
         id,
-        params,
       },
       fields: {
         NAME: name,

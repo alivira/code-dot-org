@@ -398,12 +398,7 @@ export default class FunctionEditor {
 
   addParamsFromProcedure() {
     this.toolboxParameters = [];
-    let procedureInfo = this.block.getProcedureModel();
-    const parameters = procedureInfo.getParameters();
-    console.log({parameters});
-    for (var i = 0; i < procedureInfo.parameters.length; i++) {
-      this.addParameter(parameters[i].getName());
-    }
+    // add a single "this sprite" parameter for a behavior function.
   }
 
   addParameter(newParameterName) {
