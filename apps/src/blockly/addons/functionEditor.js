@@ -133,13 +133,16 @@ export default class FunctionEditor {
    * the procedure workspace if it already exists, or create a new block.
    * @param {Procedure} procedure The procedure to show.
    */
-  showForFunction(procedure) {
+  showForFunction(procedure, extraParameters) {
     // We disable events while clearing the workspace in order to skip
     // propogating those events to the other workspaces. We would be propogating
     // delete events, but we aren't actually deleting the blocks, just removing them
     // from the editor workspace.
+    console.log('in showForFunction');
+    console.log({procedure, extraParameters});
     Blockly.Events.disable();
     this.editorWorkspace.clear();
+    this.parameterToolbox.hide();
     Blockly.Events.enable();
 
     this.nameInput.value = procedure.getName();
@@ -184,11 +187,12 @@ export default class FunctionEditor {
         this.editorWorkspace
       );
     }
-    this.addParamsFromProcedure();
+    this.addParamsFromProcedure(extraParameters);
     console.log('about to show toolbox?');
     console.log({toolboxParameters: this.toolboxParameters});
+    console.log({parameterWorkspace: this.parameterToolbox.targetWorkspace});
     this.parameterToolbox.show(this.toolboxParameters);
-    this.parameterToolbox.position();
+    //this.parameterToolbox.position();
     this.functionDescriptionInput.value = this.block.description || '';
   }
 
@@ -326,14 +330,22 @@ export default class FunctionEditor {
   }
 
   setUpParameterToolbox() {
-    this.parameterToolbox = new Blockly.HorizontalFlyout({
-      ...this.editorWorkspace.options,
+    const options = {
+      //...this.editorWorkspace.options,
+      ...Blockly.getMainWorkspace().options,
       parentWorkspace: this.editorWorkspace,
-    });
+      // minWidth: 200,
+      // maxWidth: 800,
+      toolboxPosition: 0,
+    };
+    console.log({options});
+    this.parameterToolbox = new Blockly.HorizontalFlyout(options);
     const toolboxDom = this.parameterToolbox.createDom('svg');
     const toolboxContainer = document.getElementById(MODAL_EDITOR_TOOLBOX_ID);
     toolboxContainer.appendChild(toolboxDom);
     this.parameterToolbox.init(this.editorWorkspace);
+    console.log('calling getOriginOffsetInPixels');
+    console.log(this.editorWorkspace.getOriginOffsetInPixels());
   }
 
   /**
@@ -396,19 +408,9 @@ export default class FunctionEditor {
     }
   }
 
-  addParamsFromProcedure() {
-    this.toolboxParameters = [];
-    // add a single "this sprite" parameter for a behavior function.
-  }
-
-  addParameter(newParameterName) {
-    this.toolboxParameters.push(this.newParameterBlock(newParameterName));
-  }
-
-  newParameterBlock(parameterName) {
-    return {
-      kind: 'block',
-      type: 'sprite_parameter_get',
-    };
+  addParamsFromProcedure(extraParameters) {
+    // TODO: support getting parameters from the procedure as well as hard-coded
+    // parameters. Only needed once we start supporting labs besides Sprite Lab.
+    this.toolboxParameters = extraParameters || [];
   }
 }

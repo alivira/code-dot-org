@@ -92,7 +92,7 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
     style: 'behavior_blocks',
     helpUrl: '%{BKY_PROCEDURES_CALLNORETURN_HELPURL}',
     extensions: [
-      'procedures_edit_button',
+      'behaviors_edit_button',
       'procedure_caller_get_def_mixin',
       'procedure_caller_var_mixin',
       'procedure_caller_update_shape_mixin',
@@ -157,6 +157,7 @@ const editButton = function () {
     this.inputList.length &&
     !this.workspace.isFlyout
   ) {
+    console.log('creating edit button');
     const button = new Blockly.FieldButton({
       value: msg.edit(),
       onClick: editButtonHandler,
@@ -170,10 +171,19 @@ GoogleBlockly.Extensions.register('behaviors_edit_button', editButton);
 
 // Respond to the click of a call block's edit button
 const editButtonHandler = function () {
+  console.log('in edit button handler');
   if (modalFunctionEditorExperimentEnabled) {
     const procedure = this.getSourceBlock().getProcedureModel();
     if (procedure) {
-      Blockly.functionEditor.showForFunction(procedure);
+      console.log({procedure});
+      Blockly.functionEditor.showForFunction(procedure, [
+        {
+          kind: 'block',
+          type: 'sprite_parameter_get',
+          x: 0,
+          y: 0,
+        },
+      ]);
     }
   } else {
     // If we aren't using the new modal function editor yet, just center the block that

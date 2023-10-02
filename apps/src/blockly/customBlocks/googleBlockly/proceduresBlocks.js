@@ -105,6 +105,7 @@ export const blocks = GoogleBlockly.common.createBlockDefinitionsFromJsonArray([
 
 // Respond to the click of a call block's edit button
 export const editButtonHandler = function () {
+  console.log('in procedures show for function');
   if (modalFunctionEditorExperimentEnabled) {
     const procedure = this.getSourceBlock().getProcedureModel();
     if (procedure) {
