@@ -62,6 +62,7 @@ import {
   ObservableParameterModel,
 } from '@blockly/block-shareable-procedures';
 import experiments from '@cdo/apps/util/experiments';
+import TestHorizontalFlyout from './addons/testHorizontalFlyout';
 
 const options = {
   contextMenu: true,
@@ -274,6 +275,7 @@ function initializeBlocklyWrapper(blocklyInstance) {
   blocklyWrapper.FieldImageDropdown = CdoFieldImageDropdown;
   blocklyWrapper.FieldToggle = CdoFieldToggle;
   blocklyWrapper.FieldFlyout = CdoFieldFlyout;
+  blocklyWrapper.TestHorizontalFlyout = TestHorizontalFlyout;
 
   blocklyWrapper.blockly_.registry.register(
     blocklyWrapper.blockly_.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,

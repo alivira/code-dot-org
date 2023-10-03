@@ -97,7 +97,7 @@ function devtool({minify} = {}) {
   } else if (process.env.DEBUG_MINIFIED) {
     return 'eval-source-map';
   } else if (process.env.DEV) {
-    return 'eval-cheap-module-source-map';
+    return 'eval';
   } else {
     return 'inline-source-map';
   }

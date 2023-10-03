@@ -192,7 +192,8 @@ export default class FunctionEditor {
     console.log({toolboxParameters: this.toolboxParameters});
     console.log({parameterWorkspace: this.parameterToolbox.targetWorkspace});
     this.parameterToolbox.show(this.toolboxParameters);
-    //this.parameterToolbox.position();
+    this.parameterToolbox.position();
+    this.parameterToolbox.reflow();
     this.functionDescriptionInput.value = this.block.description || '';
   }
 
@@ -339,7 +340,7 @@ export default class FunctionEditor {
       toolboxPosition: 0,
     };
     console.log({options});
-    this.parameterToolbox = new Blockly.HorizontalFlyout(options);
+    this.parameterToolbox = new Blockly.TestHorizontalFlyout(options);
     const toolboxDom = this.parameterToolbox.createDom('svg');
     const toolboxContainer = document.getElementById(MODAL_EDITOR_TOOLBOX_ID);
     toolboxContainer.appendChild(toolboxDom);

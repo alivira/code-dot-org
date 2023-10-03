@@ -56,7 +56,7 @@ export default function ModalFunctionEditor() {
           </div>
           <div
             id={MODAL_EDITOR_TOOLBOX_ID}
-            className={moduleStyles.modalToolbox}
+            className={classNames('injectionDiv', moduleStyles.modalToolbox)}
           />
         </div>
       </div>
