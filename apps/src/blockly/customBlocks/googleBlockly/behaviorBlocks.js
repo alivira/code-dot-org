@@ -180,8 +180,8 @@ const editButtonHandler = function () {
         {
           kind: 'block',
           type: 'sprite_parameter_get',
-          x: 0,
-          y: 0,
+          // x: 0,
+          // y: 0,
         },
       ]);
     }

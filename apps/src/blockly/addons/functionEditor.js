@@ -334,19 +334,27 @@ export default class FunctionEditor {
     const options = {
       //...this.editorWorkspace.options,
       ...Blockly.getMainWorkspace().options,
+      move: {
+        scrollbars: {
+          horizontal: false,
+          vertical: false,
+        },
+        drag: false,
+        wheel: false,
+      },
       parentWorkspace: this.editorWorkspace,
-      // minWidth: 200,
-      // maxWidth: 800,
+      trashcan: false,
+      minWidth: 200,
+      maxWidth: 800,
       toolboxPosition: 0,
     };
     console.log({options});
     this.parameterToolbox = new Blockly.TestHorizontalFlyout(options);
+    this.parameterToolbox.autoClose = false;
     const toolboxDom = this.parameterToolbox.createDom('svg');
     const toolboxContainer = document.getElementById(MODAL_EDITOR_TOOLBOX_ID);
     toolboxContainer.appendChild(toolboxDom);
     this.parameterToolbox.init(this.editorWorkspace);
-    console.log('calling getOriginOffsetInPixels');
-    console.log(this.editorWorkspace.getOriginOffsetInPixels());
   }
 
   /**
