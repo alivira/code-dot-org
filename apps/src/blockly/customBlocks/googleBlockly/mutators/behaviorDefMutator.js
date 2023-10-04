@@ -57,6 +57,13 @@ export const behaviorDefMutator = {
    * @this {Blockly.Block}
    */
   domToMutation: function (xmlElement) {
+    for (let i = 0; i < xmlElement.childNodes.length; i++) {
+      const node = xmlElement.childNodes[i];
+      const nodeName = node.nodeName.toLowerCase();
+      if (nodeName === 'description') {
+        this.description = node.textContent;
+      }
+    }
     this.behaviorId = xmlElement.nextElementSibling.getAttribute('id');
   },
 

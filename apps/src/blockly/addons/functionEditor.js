@@ -155,16 +155,28 @@ export default class FunctionEditor {
       Blockly.getHiddenDefinitionWorkspace()
     );
 
+    console.log({existingProcedureBlock});
+
+    let hasToolbox = false;
+    this.addParamsFromProcedure(extraParameters);
+    if (this.toolboxParameters.length > 0) {
+      this.parameterToolbox.show(this.toolboxParameters);
+      this.parameterToolbox.position();
+      this.parameterToolbox.reflow();
+      hasToolbox = true;
+    }
+
     if (existingProcedureBlock) {
       // If we already have stored data about the procedure, use that.
       const existingData = Blockly.serialization.blocks.save(
         existingProcedureBlock
       );
+      console.log({existingData});
       // Disable events here so we don't copy an existing block into the hidden definition
       // workspace.
       Blockly.Events.disable();
       this.block = Blockly.serialization.blocks.append(
-        this.addEditorWorkspaceBlockConfig(existingData),
+        this.addEditorWorkspaceBlockConfig(existingData, hasToolbox),
         this.editorWorkspace
       );
       Blockly.Events.enable();
@@ -183,17 +195,10 @@ export default class FunctionEditor {
         movable: false,
       };
       this.block = Blockly.serialization.blocks.append(
-        this.addEditorWorkspaceBlockConfig(newDefinitionBlock),
+        this.addEditorWorkspaceBlockConfig(newDefinitionBlock, hasToolbox),
         this.editorWorkspace
       );
     }
-    this.addParamsFromProcedure(extraParameters);
-    console.log('about to show toolbox?');
-    console.log({toolboxParameters: this.toolboxParameters});
-    console.log({parameterWorkspace: this.parameterToolbox.targetWorkspace});
-    this.parameterToolbox.show(this.toolboxParameters);
-    this.parameterToolbox.position();
-    this.parameterToolbox.reflow();
     this.functionDescriptionInput.value = this.block.description || '';
   }
 
@@ -344,8 +349,6 @@ export default class FunctionEditor {
       },
       parentWorkspace: this.editorWorkspace,
       trashcan: false,
-      minWidth: 200,
-      maxWidth: 800,
       toolboxPosition: 0,
     };
     console.log({options});
@@ -365,13 +368,18 @@ export default class FunctionEditor {
    * @param blockConfig: Block json configuration
    * @returns Block configuration with x and y coordinates
    */
-  addEditorWorkspaceBlockConfig(blockConfig) {
-    const returnValue = {
-      ...blockConfig,
+  addEditorWorkspaceBlockConfig(blockConfig, hasToolbox) {
+    let coordinates = {
       x: 50,
       y: 210,
     };
-    return returnValue;
+    if (hasToolbox) {
+      coordinates.y = 280;
+    }
+    return {
+      ...blockConfig,
+      ...coordinates,
+    };
   }
 
   // Copy all procedure models from the hidden definition workspace to the editor workspace,
