@@ -184,6 +184,7 @@ export default class FunctionEditor {
       // Otherwise, we need to create a new block from scratch.
       const newDefinitionBlock = {
         kind: 'block',
+        // TODO: could be behavior now
         type: 'procedures_defnoreturn',
         extraState: {
           procedureId: procedure.getId(),
