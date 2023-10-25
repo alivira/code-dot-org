@@ -2,7 +2,7 @@
 
 require_relative '../deployment'
 # Ensure all application secrets are loaded.
-CDO.cdo_secrets&.required! unless rack_env?(:development)
+CDO.cdo_secrets&.required! unless rack_env?(:adhoc)
 
 require File.expand_path('../config/environment',  __FILE__)
 
