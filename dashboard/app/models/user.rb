@@ -886,7 +886,7 @@ class User < ApplicationRecord
   def self.new_with_session(params, session)
     return super unless PartialRegistration.in_progress? session
     new_from_partial_registration session do |user|
-      user.attributes = user.attributes.merge(params) {|_key, old_val, new_val| new_val.presence || old_val}.compact
+      Policies::User.assign_form_params(user, params)
     end
   end
 

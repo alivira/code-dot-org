@@ -111,7 +111,10 @@ class AuthenticationOption < ApplicationRecord
   end
 
   def remove_student_cleartext_email
-    self.email = '' if user&.student?
+    if user&.student?
+      self.email = ''
+      Services::Lti.remove_cleartext_email(self) if lti?
+    end
   end
 
   def fill_authentication_id
