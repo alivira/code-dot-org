@@ -87,9 +87,17 @@ class LtiV1Controller < ApplicationController
       user = Queries::Lti.get_user(decoded_jwt)
       target_link_uri = decoded_jwt[:'https://purl.imsglobal.org/spec/lti/claim/target_link_uri']
 
+      launch_context = decoded_jwt[:'https://purl.imsglobal.org/spec/lti/claim/context']
+      resource_link_id = decoded_jwt[:'https://purl.imsglobal.org/spec/lti/claim/resource_link'][:id]
+      redirect_params = {
+        lti_integration_id: integration.id,
+        section_name: launch_context[:title],
+        resource_link_id: resource_link_id,
+      }
+
       if user
         sign_in user
-        redirect_to target_link_uri
+        redirect_to target_link_uri + '?' + redirect_params.to_query
       else
         user = Services::Lti.initialize_lti_user(decoded_jwt)
         PartialRegistration.persist_attributes(session, user)
@@ -106,6 +114,17 @@ class LtiV1Controller < ApplicationController
     response = JSON.parse(HTTParty.get(public_jwk_url).body)
     jwk_set = JSON::JWK::Set.new response
     JSON::JWT.decode(id_token, jwk_set)
+  end
+
+  def launch_section
+    puts 'in correct route'
+    # return unauthorized_status unless current_user
+    # return head :bad_request unless params[:lti_integration_id] && params[:return_url]
+    lti_integration_id = params[:lti_integration_id]
+    resource_link_id = params[:resource_link_id]
+    section_name = params[:section_name]
+    section = LtiSection.from_lti_launch(user_id: current_user.id, lti_integration_id: lti_integration_id, section_name: section_name, resource_link_id: resource_link_id)
+    redirect_to teacher_dashboard_section_path(section_id: section.id)
   end
 
   private

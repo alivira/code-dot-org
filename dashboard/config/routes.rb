@@ -14,7 +14,7 @@ Dashboard::Application.routes.draw do
     # React-router will handle sub-routes on the client.
     get 'teacher_dashboard/sections/:section_id/parent_letter', to: 'teacher_dashboard#parent_letter'
     get 'teacher_dashboard/sections/:section_id/*path', to: 'teacher_dashboard#show', via: :all
-    get 'teacher_dashboard/sections/:section_id', to: 'teacher_dashboard#show'
+    get 'teacher_dashboard/sections/:section_id', to: 'teacher_dashboard#show', as: 'teacher_dashboard_section'
 
     resources :survey_results, only: [:create], defaults: {format: 'json'}
 
@@ -601,6 +601,7 @@ Dashboard::Application.routes.draw do
     # LTI API endpoints
     match '/lti/v1/login(/:platform_id)', to: 'lti_v1#login', via: [:get, :post]
     post '/lti/v1/authenticate', to: 'lti_v1#authenticate'
+    match '/lti/v1/launch_section', to: 'lti_v1#launch_section', via: [:get, :post]
 
     # OAuth endpoints
     get '/oauth/jwks', to: 'oauth_jwks#jwks'
