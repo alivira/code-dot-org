@@ -1,7 +1,9 @@
 require "base64"
 require "queries/lti"
 require "services/lti"
+require "policies/lti"
 require "concerns/partial_registration"
+require "clients/lti_advantage_client"
 
 class LtiV1Controller < ApplicationController
   # Don't require an authenticity token because LTI Platforms POST to this
@@ -87,12 +89,17 @@ class LtiV1Controller < ApplicationController
       user = Queries::Lti.get_user(decoded_jwt)
       target_link_uri = decoded_jwt[:'https://purl.imsglobal.org/spec/lti/claim/target_link_uri']
 
-      launch_context = decoded_jwt[:'https://purl.imsglobal.org/spec/lti/claim/context']
-      resource_link_id = decoded_jwt[:'https://purl.imsglobal.org/spec/lti/claim/resource_link'][:id]
+      launch_context = decoded_jwt[Policies::Lti::LTI_CONTEXT_CLAIM]
+      nrps_url = decoded_jwt[Policies::Lti::LTI_NRPS_CLAIM][:context_memberships_url]
+      resource_link_id = decoded_jwt[Policies::Lti::LTI_RESOURCE_LINK_CLAIM][:id]
+      deployment_id = decoded_jwt[Policies::Lti::LTI_DEPLOYMENT_ID_CLAIM]
+      deployment = Queries::Lti.get_deployment(integration.id, deployment_id)
       redirect_params = {
         lti_integration_id: integration.id,
-        section_name: launch_context[:title],
-        resource_link_id: resource_link_id,
+        deployment_id: deployment.id,
+        context_id: launch_context[:id],
+        rlid: resource_link_id,
+        nrps_url: nrps_url,
       }
 
       if user
@@ -101,7 +108,7 @@ class LtiV1Controller < ApplicationController
       else
         user = Services::Lti.initialize_lti_user(decoded_jwt)
         PartialRegistration.persist_attributes(session, user)
-        session[:user_return_to] = target_link_uri
+        session[:user_return_to] = target_link_uri + '?' + redirect_params.to_query
         redirect_to new_user_registration_url
       end
     else
@@ -121,10 +128,38 @@ class LtiV1Controller < ApplicationController
     # return unauthorized_status unless current_user
     # return head :bad_request unless params[:lti_integration_id] && params[:return_url]
     lti_integration_id = params[:lti_integration_id]
-    resource_link_id = params[:resource_link_id]
-    section_name = params[:section_name]
-    section = LtiSection.from_lti_launch(user_id: current_user.id, lti_integration_id: lti_integration_id, section_name: section_name, resource_link_id: resource_link_id)
-    redirect_to teacher_dashboard_section_path(section_id: section.id)
+    deployment_id = params[:deployment_id]
+    context_id = params[:context_id]
+    resource_link_id = params[:rlid]
+    nrps_url = params[:nrps_url]
+
+    course = LtiCourse.find_or_create_by(lti_integration_id: lti_integration_id, context_id: context_id) do |c|
+      c.lti_deployment_id = deployment_id
+      c.nrps_url = nrps_url
+      c.resource_link_id = resource_link_id
+    end
+    lti_integration = LtiIntegration.find(lti_integration_id) #TODO: handle missing integration
+    lti_advantage_client = LtiAdvantageClient.new(lti_integration.client_id, lti_integration.issuer)
+    nrps_response = lti_advantage_client.get_context_membership(nrps_url, resource_link_id)
+    nrps_sections = Services::Lti.parse_nrps_response(nrps_response)
+    lti_sections = LtiSection.where(lti_course_id: course.id)
+    nrps_sections.keys.each do |lms_section_id|
+      # Check if lti_sections already contains a section with this lms_section_id
+      lti_section = lti_sections.find_by(lms_section_id: lms_section_id)
+      if lti_section.nil?
+        section = Section.new(
+          {
+            user_id: current_user.id,
+            name: nrps_sections[lms_section_id][:name],
+            login_type: Section::LOGIN_TYPE_LTI_V1,
+          }
+        )
+        lti_section = LtiSection.create(lti_course_id: course.id, lms_section_id: lms_section_id, section: section)
+      end
+      Services::Lti.sync_roster(lti_section, nrps_sections[lms_section_id][:members])
+    end
+    # redirect_to teacher_dashboard_section_path(section_id: section.id)
+    redirect_to home_path
   end
 
   private

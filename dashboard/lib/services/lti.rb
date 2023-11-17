@@ -24,4 +24,40 @@ class Services::Lti
     user.authentication_options = [ao]
     user
   end
+
+  def self.parse_nrps_response(nrps_response)
+    sections = {}
+    members = nrps_response[:members]
+    members.each do |member|
+      next if member[:status] == 'Inactive' || member[:roles].exclude?(Policies::Lti::CONTEXT_LEARNER_ROLE)
+      # TODO: handle multiple messages. Shouldn't be needed until we support Deep Linking.
+      message = member[:message].first
+
+      # Important: These custom variables are proprietary to Canvas' implementation of LTI Advantage.
+      custom_variables = message[Policies::Lti::LTI_CUSTOM_CLAIMS.to_sym]
+      puts message.inspect
+      puts 'custom variables:'
+      puts custom_variables
+
+      # Handles the possibility of the LMS not having sectionId variable substitution configured.
+      member_section_ids = custom_variables[:section_ids]&.split(',') || [nil]
+      member_section_names = custom_variables[:section_names]
+      member_section_ids.each_with_index do |section_id, index|
+        if sections[section_id].present?
+          sections[section_id][:members] << member[:user_id]
+        else
+          sections[section_id] = {
+            name: member_section_names[index],
+            members: [member[:user_id]],
+          }
+        end
+      end
+    end
+    sections
+  end
+
+  # Takes an LtiSection and an array of LMS user IDs and syncs the LtiSection's roster to match the LMS roster.
+  def self.sync_roster(lti_section, nrps_user_ids)
+    puts 'syncing'
+  end
 end
