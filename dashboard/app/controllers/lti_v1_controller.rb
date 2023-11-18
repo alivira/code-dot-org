@@ -124,7 +124,6 @@ class LtiV1Controller < ApplicationController
   end
 
   def launch_section
-    puts 'in correct route'
     # return unauthorized_status unless current_user
     # return head :bad_request unless params[:lti_integration_id] && params[:return_url]
     lti_integration_id = params[:lti_integration_id]

@@ -41,10 +41,11 @@ class Services::Lti
 
       # Handles the possibility of the LMS not having sectionId variable substitution configured.
       member_section_ids = custom_variables[:section_ids]&.split(',') || [nil]
-      member_section_names = custom_variables[:section_names]
+      # :section_names from Canvas is a stringified JSON array
+      member_section_names = JSON.parse(custom_variables[:section_names])
       member_section_ids.each_with_index do |section_id, index|
         if sections[section_id].present?
-          sections[section_id][:members] << member[:user_id]
+          sections[section_id][:members] << member
         else
           sections[section_id] = {
             name: member_section_names[index],
