@@ -7,6 +7,15 @@ class Queries::Lti
     User.find_by_credential(type: AuthenticationOption::LTI_V1, id: auth_id)
   end
 
+  def self.get_user_from_nrps(client_id:, issuer:, nrps_member:)
+    id_token = {
+      sub: nrps_member[:user_id],
+      aud: client_id,
+      iss: issuer,
+    }
+    get_user(id_token)
+  end
+
   def self.get_deployment(lti_integration_id, deployment_id)
     LtiDeployment.find_by(lti_integration_id: lti_integration_id, deployment_id: deployment_id)
   end

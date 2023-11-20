@@ -155,7 +155,7 @@ class LtiV1Controller < ApplicationController
         )
         lti_section = LtiSection.create(lti_course_id: course.id, lms_section_id: lms_section_id, section: section)
       end
-      Services::Lti.sync_roster(lti_section, nrps_sections[lms_section_id][:members])
+      Services::Lti.sync_section_roster(lti_integration, lti_section, nrps_sections[lms_section_id][:members])
     end
     # redirect_to teacher_dashboard_section_path(section_id: section.id)
     redirect_to home_path
