@@ -52,7 +52,7 @@ export const NO_OPTIONS_MESSAGE = 'uninitialized';
 export const EMPTY_OPTION = '???';
 export const WORKSPACE_PADDING = 16;
 
-export function stringIsXml(str) {
+export function stringIsXml(str: string) {
   try {
     JSON.parse(str);
     // If parsed successfully, string is json, not xml.

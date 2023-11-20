@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {javascriptGenerator} from 'blockly/javascript';
+import GoogleBlockly, {Block, Options, Workspace} from 'blockly/core';
 import {
   ScrollBlockDragger,
   ScrollOptions,
@@ -62,6 +64,9 @@ import {
   ObservableParameterModel,
 } from '@blockly/block-shareable-procedures';
 import {adjustCalloutsOnViewportChange, disableOrphans} from './eventHandlers';
+import {AnyDuringMigration} from '../util/types';
+import {BlocklyWrapper, GoogleBlocklyWorkspace} from './types';
+import {Abstract} from 'blockly/core/events/events_abstract';
 
 const options = {
   contextMenu: true,
@@ -84,12 +89,15 @@ const INFINITE_LOOP_TRAP =
  * This wrapper will contain all of our customizations to Google Blockly.
  * See also ./cdoBlocklyWrapper.js
  */
-const BlocklyWrapper = function (blocklyInstance) {
+const BlocklyWrapper = function (
+  this: BlocklyWrapper,
+  blocklyInstance: typeof GoogleBlockly
+) {
   this.version = BlocklyVersion.GOOGLE;
   this.blockly_ = blocklyInstance;
   this.mainWorkspace = undefined;
 
-  this.wrapReadOnlyProperty = function (propertyName) {
+  this.wrapReadOnlyProperty = function (propertyName: string) {
     Object.defineProperty(this, propertyName, {
       get: function () {
         return this.blockly_[propertyName];
@@ -97,7 +105,7 @@ const BlocklyWrapper = function (blocklyInstance) {
     });
   };
 
-  this.wrapSettableProperty = function (propertyName) {
+  this.wrapSettableProperty = function (propertyName: string) {
     Object.defineProperty(this, propertyName, {
       get: function () {
         return this.blockly_[propertyName];
@@ -113,7 +121,7 @@ const BlocklyWrapper = function (blocklyInstance) {
    * and sets the field on our wrapper for use by our code.
    * @param {array} overrides (elements are arrays of shape [fieldRegistryName, fieldClassName, fieldClass])
    */
-  this.overrideFields = function (overrides) {
+  this.overrideFields = function (overrides: string[]) {
     overrides.forEach(override => {
       const fieldRegistryName = override[0];
       const fieldClassName = override[1];
@@ -127,7 +135,7 @@ const BlocklyWrapper = function (blocklyInstance) {
       this[fieldClassName] = fieldClass;
     });
   };
-};
+} as BlocklyWrapper;
 
 /**
  * Note that this can only be called once per page load, as this initializes
@@ -137,7 +145,7 @@ const BlocklyWrapper = function (blocklyInstance) {
  * If this needs to be called multiple times (for example, in tests), call
  * Blockly.navigationController.dispose() before calling this function again.
  */
-function initializeBlocklyWrapper(blocklyInstance) {
+function initializeBlocklyWrapper(blocklyInstance: typeof GoogleBlockly) {
   const blocklyWrapper = new BlocklyWrapper(blocklyInstance);
 
   blocklyWrapper.setInfiniteLoopTrap = function () {
@@ -152,6 +160,7 @@ function initializeBlocklyWrapper(blocklyInstance) {
     return Blockly.JavaScript.INFINITE_LOOP_TRAP;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   blocklyWrapper.loopHighlight = function () {}; // TODO
   blocklyWrapper.getWorkspaceCode = function () {
     let workspaceCode = Blockly.JavaScript.workspaceToCode(
@@ -389,14 +398,16 @@ function initializeBlocklyWrapper(blocklyInstance) {
     },
   });
 
-  blocklyWrapper.addChangeListener = function (blockspace, handler) {
+  blocklyWrapper.addChangeListener = function (
+    blockspace: Workspace,
+    handler: (e: Abstract) => void
+  ) {
     blockspace.addChangeListener(handler);
   };
 
   const googleBlocklyMixin = blocklyWrapper.BlockSvg.prototype.mixin;
   blocklyWrapper.BlockSvg.prototype.mixin = function (
-    mixinObj,
-    opt_disableCheck
+    mixinObj: AnyDuringMigration
   ) {
     googleBlocklyMixin.call(this, mixinObj, true);
   };
@@ -424,17 +435,25 @@ function initializeBlocklyWrapper(blocklyInstance) {
     return false;
   };
 
-  blocklyWrapper.Input.prototype.setStrictCheck = function (check) {
+  blocklyWrapper.Input.prototype.setStrictCheck = function (
+    check: string | string[] | null
+  ) {
     return this.setCheck(check);
   };
-  blocklyWrapper.Block.prototype.setStrictOutput = function (isOutput, check) {
+  blocklyWrapper.Block.prototype.setStrictOutput = function (
+    isOutput: boolean,
+    check: string | string[] | null
+  ) {
     return this.setOutput(isOutput, check);
   };
 
   const originalSetOutput = blocklyWrapper.Block.prototype.setOutput;
   // Replaces the original setOutput method with a custom version that will handle the case when "None" is passed appropriately
   // See: https://github.com/code-dot-org/code-dot-org/blob/9d63cbcbfd84b8179ae2519adbb5869cbc319643/apps/src/blocklyAddons/cdoConstants.js#L9
-  blocklyWrapper.Block.prototype.setOutput = function (isOutput, check) {
+  blocklyWrapper.Block.prototype.setOutput = function (
+    isOutput: boolean,
+    check: string | string[] | null
+  ) {
     if (check === 'None') {
       return originalSetOutput.call(this, isOutput, null);
     } else {
@@ -443,7 +462,12 @@ function initializeBlocklyWrapper(blocklyInstance) {
   };
 
   // Block fields are referred to as titles in CDO Blockly.
-  blocklyWrapper.Block.prototype.setTitleValue = function (newValue, name) {
+  blocklyWrapper.Block.prototype.setTitleValue = function (
+    // Blockly does not have a type for newValue, so we use any.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    newValue: any,
+    name: string
+  ) {
     return this.setFieldValue(newValue, name);
   };
 
@@ -454,10 +478,13 @@ function initializeBlocklyWrapper(blocklyInstance) {
 
   // Called by StudioApp, but only implemented for CDO Blockly.
   blocklyWrapper.WorkspaceSvg.prototype.addUnusedBlocksHelpListener =
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     function () {};
 
   blocklyWrapper.WorkspaceSvg.prototype.getAllUsedBlocks = function () {
-    return this.getAllBlocks().filter(block => !block.disabled);
+    return (this as Workspace)
+      .getAllBlocks(false)
+      .filter(block => block.isEnabled());
   };
 
   // Used in levels when starting over or resetting Version History
@@ -473,7 +500,7 @@ function initializeBlocklyWrapper(blocklyInstance) {
 
   // Used in levels with pre-defined "Blockly Variables"
   blocklyWrapper.WorkspaceSvg.prototype.registerGlobalVariables = function (
-    variableList
+    variableList: string[]
   ) {
     this.globalVariables = variableList;
     this.getVariableMap().addVariables(variableList);
@@ -497,20 +524,23 @@ function initializeBlocklyWrapper(blocklyInstance) {
   };
 
   // TODO - called by StudioApp, not sure whether they're still needed.
-  blocklyWrapper.WorkspaceSvg.prototype.setEnableToolbox = function (
-    enabled
-  ) {};
-  blocklyWrapper.WorkspaceSvg.prototype.traceOn = function (armed) {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  blocklyWrapper.WorkspaceSvg.prototype.setEnableToolbox = function () {};
 
-  blocklyWrapper.VariableMap.prototype.addVariables = function (variableList) {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  blocklyWrapper.WorkspaceSvg.prototype.traceOn = function () {};
+
+  blocklyWrapper.VariableMap.prototype.addVariables = function (
+    variableList: string[]
+  ) {
     variableList.forEach(varName => this.createVariable(varName));
   };
 
   // TODO - used for spritelab behavior blocks
-  blocklyWrapper.Block.createProcedureDefinitionBlock = function (config) {};
+  blocklyWrapper.Block.createProcedureDefinitionBlock = function () {};
 
   // TODO - used to add "create a behavior" button to the toolbox
-  blocklyWrapper.Flyout.configure = function (type, config) {};
+  blocklyWrapper.Flyout.configure = function () {};
 
   blocklyWrapper.getGenerator = function () {
     return this.JavaScript;
@@ -526,7 +556,7 @@ function initializeBlocklyWrapper(blocklyInstance) {
       BLOCK_SPACE_SCROLLED: 'blockSpaceScrolled',
       RUN_BUTTON_CLICKED: 'runButtonClicked',
     },
-    onMainBlockSpaceCreated: callback => {
+    onMainBlockSpaceCreated: (callback: () => void) => {
       if (Blockly.mainBlockSpace) {
         callback();
       } else {
@@ -537,7 +567,11 @@ function initializeBlocklyWrapper(blocklyInstance) {
       }
     },
 
-    createReadOnlyBlockSpace: (container, xml, options) => {
+    createReadOnlyBlockSpace: (
+      container: HTMLElement,
+      xml: Node,
+      options: AnyDuringMigration
+    ) => {
       const theme = cdoUtils.getUserTheme(options.theme);
       const workspace = new Blockly.WorkspaceSvg({
         readOnly: true,
@@ -545,7 +579,7 @@ function initializeBlocklyWrapper(blocklyInstance) {
         plugins: {},
         RTL: options.rtl,
         renderer: options.renderer || Renderers.DEFAULT,
-      });
+      } as AnyDuringMigration as Options);
       const svg = Blockly.utils.dom.createSvgElement(
         'svg',
         {
@@ -571,20 +605,20 @@ function initializeBlocklyWrapper(blocklyInstance) {
       // Loop through all the parent blocks and remove vertical translation value
       // This makes the output more condensed and readable, while preserving
       // horizontal translation values for RTL rendering.
-      const blocksInWorkspace = workspace.getAllBlocks();
+      const blocksInWorkspace = workspace.getAllBlocks(false);
       blocksInWorkspace
         .filter(block => block.getParent() === null)
         .forEach(block => {
-          const svgTransformList = block.svgGroup_.transform.baseVal;
+          const svgTransformList = block.getSvgRoot().transform.baseVal;
           const svgTransform = svgTransformList.getItem(0);
           const svgTranslationX = svgTransform.matrix.e;
           svgTransform.setTranslate(svgTranslationX, 0);
         });
 
       // Shrink SVG to size of the block
-      const bbox = svg.getBBox();
-      svg.setAttribute('height', bbox.height + bbox.y);
-      svg.setAttribute('width', bbox.width + bbox.x);
+      const bbox = (svg as SVGGraphicsElement).getBBox();
+      svg.setAttribute('height', `${bbox.height + bbox.y}`);
+      svg.setAttribute('width', `${bbox.width + bbox.x}`);
       // Add a transform to center read-only blocks on their line
       const notchHeight = workspace.getRenderer().getConstants().NOTCH_HEIGHT;
       svg.setAttribute(
@@ -596,7 +630,10 @@ function initializeBlocklyWrapper(blocklyInstance) {
     },
   };
 
-  blocklyWrapper.inject = function (container, opt_options) {
+  blocklyWrapper.inject = function (
+    container: HTMLElement,
+    opt_options: AnyDuringMigration
+  ) {
     const options = {
       ...opt_options,
       theme: cdoUtils.getUserTheme(opt_options.theme),
@@ -620,7 +657,8 @@ function initializeBlocklyWrapper(blocklyInstance) {
     };
     // CDO Blockly takes assetUrl as an inject option, and it's used throughout
     // apps, so we should also set it here.
-    blocklyWrapper.assetUrl = opt_options.assetUrl || (path => `./${path}`);
+    blocklyWrapper.assetUrl =
+      opt_options.assetUrl || ((path: string) => `./${path}`);
 
     // CDO Blockly takes customSimpleDialog as an inject option and uses it
     // instead of the default prompt dialogs, so we should also set it here.
@@ -682,7 +720,8 @@ function initializeBlocklyWrapper(blocklyInstance) {
     );
 
     // Hidden workspace where we can put function definitions.
-    const hiddenDefinitionWorkspace = new Blockly.Workspace();
+    const hiddenDefinitionWorkspace =
+      new Blockly.Workspace() as GoogleBlocklyWorkspace;
     // The hidden definition workspace is not rendered, so do not try to add
     // svg frames around the definitions.
     hiddenDefinitionWorkspace.noFunctionBlockFrame = true;
@@ -700,18 +739,23 @@ function initializeBlocklyWrapper(blocklyInstance) {
   };
 
   // Used by StudioApp to tell Blockly to resize for Mobile Safari.
-  blocklyWrapper.fireUiEvent = function (element, eventName, opt_properties) {
+  blocklyWrapper.fireUiEvent = function (
+    _element: AnyDuringMigration,
+    eventName: string
+  ) {
     if (eventName === 'resize') {
       blocklyWrapper.svgResize(blocklyWrapper.mainBlockSpace);
     }
   };
 
-  blocklyWrapper.setMainWorkspace = function (mainWorkspace) {
+  blocklyWrapper.setMainWorkspace = function (
+    mainWorkspace: GoogleBlocklyWorkspace
+  ) {
     this.mainWorkspace = mainWorkspace;
   };
 
   blocklyWrapper.setHiddenDefinitionWorkspace = function (
-    hiddenDefinitionWorkspace
+    hiddenDefinitionWorkspace: GoogleBlocklyWorkspace
   ) {
     this.hiddenDefinitionWorkspace = hiddenDefinitionWorkspace;
   };
