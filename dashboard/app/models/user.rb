@@ -215,6 +215,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :authentication_options
   belongs_to :primary_contact_info, class_name: 'AuthenticationOption', optional: true
 
+  has_many :lti_user_identities, dependent: :destroy
+
   # This custom validator makes email collision checks on the AuthenticationOption
   # model also show up as validation errors for the email field on the User
   # model.
@@ -477,12 +479,6 @@ class User < ApplicationRecord
   has_many :section_instructors, foreign_key: 'instructor_id'
   has_many :active_section_instructors, -> {where(status: :active)}, class_name: 'SectionInstructor', foreign_key: 'instructor_id'
   has_many :sections_instructed, -> {without_deleted}, through: :active_section_instructors, source: :section
-
-  # TODO once the backfill creates SectionInstructors for every section owner,
-  # this method can be deleted and its references replaced by sections_instructed
-  def sections_owned_or_instructed
-    (sections + sections_instructed).uniq
-  end
 
   # Relationships (sections_as_students/followeds/teachers) from being a
   # student.
@@ -1469,6 +1465,21 @@ class User < ApplicationRecord
       permission?(UserPermission::LEVELBUILDER)
   end
 
+  AI_TUTOR_EXPERIMENT_NAME = 'ai-tutor'
+
+  # Teachers
+  def can_enable_ai_tutor?
+    permission?(UserPermission::AI_TUTOR_ACCESS) ||
+      SingleUserExperiment.enabled?(user: self, experiment_name: AI_TUTOR_EXPERIMENT_NAME)
+  end
+
+  # Students
+  def has_ai_tutor_access?
+    permission?(UserPermission::AI_TUTOR_ACCESS) ||
+      (get_active_experiment_names_by_teachers.include?(AI_TUTOR_EXPERIMENT_NAME) &&
+      sections_as_student.any?(&:ai_tutor_enabled))
+  end
+
   def student_of_verified_instructor?
     teachers.any?(&:verified_instructor?)
   end
@@ -1698,6 +1709,15 @@ class User < ApplicationRecord
   # Returns an array of experiment name strings
   def get_active_experiment_names
     Experiment.get_all_enabled(user: self).pluck(:name)
+  end
+
+  # Returns an array of experiment name strings that a student's teachers are enrolled in
+  def get_active_experiment_names_by_teachers
+    experiments = []
+    teachers.each do |teacher|
+      experiments.concat(Experiment.get_all_enabled(user: teacher).pluck(:name))
+    end
+    experiments.uniq
   end
 
   # Returns an array of hashes storing data for each unique course assigned to # sections that this user is a part of.
@@ -2228,6 +2248,8 @@ class User < ApplicationRecord
     # In some cases, a student might have a password but no e-mail (from our old UI)
     return false if encrypted_password.present? && hashed_email.present?
     return false if encrypted_password.present? && parent_email.present?
+    # LTI created accounts should not be teacher managed
+    return false if Policies::Lti.lti? self
     # Lastly, we check for oauth.
     !oauth?
   end

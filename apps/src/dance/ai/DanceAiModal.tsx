@@ -18,6 +18,7 @@ import AiBlockPreview from './AiBlockPreview';
 import {
   AiFieldValue,
   AiOutput,
+  DanceAiSound,
   FieldKey,
   GeneratedEffect,
   MinMax,
@@ -107,7 +108,13 @@ const getImageUrl = (id: string) => {
   return `/blockly/media/dance/ai/emoji/${id}.svg`;
 };
 
-const DanceAiModal: React.FunctionComponent = () => {
+interface DanceAiModalProps {
+  playSound: (name: DanceAiSound, options?: object) => void;
+}
+
+const DanceAiModal: React.FunctionComponent<DanceAiModalProps> = ({
+  playSound,
+}) => {
   const dispatch = useAppDispatch();
 
   // How many low-scoring results we show before the chosen one.
@@ -275,11 +282,15 @@ const DanceAiModal: React.FunctionComponent = () => {
         setInputs([...inputs, id]);
         setCurrentInputSlot(currentInputSlot + 1);
         setInputAddCount(inputAddCount + 1);
+
+        playSound('ai-select-emoji');
       }
     } else {
       // Remove item from inputs.
       setInputs(inputs.filter(input => input !== id));
       setCurrentInputSlot(currentInputSlot - 1);
+
+      playSound('ai-deselect-emoji');
     }
   };
 
@@ -362,6 +373,17 @@ const DanceAiModal: React.FunctionComponent = () => {
 
     return currentProgress;
   };
+
+  // Handle moments during generation when we should play a sound.
+  useEffect(() => {
+    if (mode === Mode.GENERATING && generatingProgress.subStep === 2) {
+      if (generatingProgress.step < BAD_GENERATED_RESULTS_COUNT) {
+        playSound('ai-generate-no', {volume: 0.25});
+      } else {
+        playSound('ai-generate-yes', {volume: 0.25});
+      }
+    }
+  }, [generatingProgress, mode, playSound]);
 
   // Animate through the generating or explanation process.
   useInterval(
@@ -518,19 +540,14 @@ const DanceAiModal: React.FunctionComponent = () => {
   const headerTextSplit = i18n
     .danceAiModalHeading({input: INPUT_KEY})
     .split(INPUT_KEY);
-  const headerContent = [0, 1, 2]
-    .map(index => {
-      if (index === 0) {
-        return headerTextSplit[0];
-      } else if (index === 1) {
-        return headerValue();
-      } else {
-        return headerTextSplit[1];
-      }
-    })
-    .map((part: string, index: number) => {
-      return <span key={index}>{part}</span>;
-    });
+
+  const headerContent = [
+    headerTextSplit[0],
+    headerValue(),
+    headerTextSplit[1],
+  ].map((part: string, index: number) => {
+    return <span key={index}>{part}</span>;
+  });
 
   const currentGeneratedEffect = getGeneratedEffect(generatingProgress.step);
 
@@ -566,12 +583,14 @@ const DanceAiModal: React.FunctionComponent = () => {
       styles={{modalBackdrop: moduleStyles.modalBackdrop}}
     >
       <div id="ai-modal-header-area" className={moduleStyles.headerArea}>
-        <img
-          src={aiBotBorder}
-          className={moduleStyles.botImage}
-          alt={i18n.danceAiModalBotAlt()}
-        />
-        {headerContent}
+        <div className={moduleStyles.headerAreaLeft}>
+          <img
+            src={aiBotBorder}
+            className={moduleStyles.botImage}
+            alt={i18n.danceAiModalBotAlt()}
+          />
+          {headerContent}
+        </div>
         <div
           id="ai-modal-header-area-right"
           className={moduleStyles.headerAreaRight}
@@ -862,7 +881,7 @@ const DanceAiModal: React.FunctionComponent = () => {
         </div>
 
         <div id="buttons-area" className={moduleStyles.buttonsArea}>
-          <div id="buttons-area-left" className={moduleStyles.buttonsAreaLeft}>
+          <div>
             <ModalButton
               currentMode={mode}
               showFor={[Mode.RESULTS]}
@@ -878,38 +897,39 @@ const DanceAiModal: React.FunctionComponent = () => {
               text={i18n.danceAiModalRegenerateButton()}
             />
           </div>
+          <div>
+            {currentInputSlot >= SLOT_COUNT && (
+              <ModalButton
+                currentMode={mode}
+                showFor={[Mode.SELECT_INPUTS]}
+                id="generate-button"
+                text={i18n.danceAiModalGenerateButton()}
+                onClick={handleGenerateClick}
+                color={Button.ButtonColor.brandSecondaryDefault}
+                className={moduleStyles.button}
+              />
+            )}
 
-          {currentInputSlot >= SLOT_COUNT && (
-            <ModalButton
-              currentMode={mode}
-              showFor={[Mode.SELECT_INPUTS]}
-              id="generate-button"
-              text={i18n.danceAiModalGenerateButton()}
-              onClick={handleGenerateClick}
-              color={Button.ButtonColor.brandSecondaryDefault}
-              className={moduleStyles.button}
-            />
-          )}
-
-          {showConvertButton && (
-            <Button
-              id="convert-button"
-              text={i18n.danceAiModalUseCodeButton()}
-              onClick={handleConvertBlocks}
-              color={Button.ButtonColor.brandSecondaryDefault}
-              className={moduleStyles.button}
-              disabled={aiModalOpenedFromFlyout}
-            />
-          )}
-          {showUseButton && (
-            <Button
-              id="use-button"
-              text={i18n.danceAiModalUseEffectButton()}
-              onClick={handleUseClick}
-              color={Button.ButtonColor.brandSecondaryDefault}
-              className={moduleStyles.button}
-            />
-          )}
+            {showConvertButton && (
+              <Button
+                id="convert-button"
+                text={i18n.danceAiModalUseCodeButton()}
+                onClick={handleConvertBlocks}
+                color={Button.ButtonColor.brandSecondaryDefault}
+                className={moduleStyles.button}
+                disabled={aiModalOpenedFromFlyout}
+              />
+            )}
+            {showUseButton && (
+              <Button
+                id="use-button"
+                text={i18n.danceAiModalUseEffectButton()}
+                onClick={handleUseClick}
+                color={Button.ButtonColor.brandSecondaryDefault}
+                className={moduleStyles.button}
+              />
+            )}
+          </div>
         </div>
       </div>
     </AccessibleDialog>
